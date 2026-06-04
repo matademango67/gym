@@ -1,0 +1,33 @@
+
+### ok 
+GET http://localhost:3000/
+
+### ok
+GET http://localhost:3000/Marta
+### ok
+POST http://localhost:3000/
+Content-Type: application/json
+
+{
+    "name": "Marta",
+    "birth": "1990-05-15",
+    "email": "marta21@gmail.com"
+}
+
+### ok
+
+Put http://localhost:3000/8d360a6e-22d3-4694-b73e-c977c89bd5c1
+Content-Type: application/json
+
+{
+    "name": "Martinesa",
+    "birth": "1990-05-15",
+    "email": "marta21@gmail.com"
+}
+### ok
+DELETE  http://localhost:3000/
+Content-Type: application/json
+
+{
+    "id": "8d360a6e-22d3-4694-b73e-c977c89bd5c1"
+}

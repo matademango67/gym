@@ -1,0 +1,26 @@
+### ok 
+GET http://localhost:3000/auth/
+### ok
+POST http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "email": "Palanco@gmail.com",
+    "password": "3333333333"
+}
+### ok
+POST http://localhost:3000/auth/reg
+Content-Type: application/json
+
+{
+    "email": "Palsanco@gmail.com",
+    "password": "3333333333"
+}
+### ok
+POST http://localhost:3000/auth/re
+Content-Type: application/json
+
+{
+    "email": "Palasanco@gmail.com",
+    "password": "3333333333"
+}
