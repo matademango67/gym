@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {role} from "../config/role.js";
 import {token_model} from "./token_model.js";
-import {generateRefreshToken, hashToken} from "../config/refresh_token.js";
+import { hashToken , generateRefreshToken} from "../config/refresh_token.js";
 
 export class auth_model {
     static async getUsers (){
@@ -77,5 +77,35 @@ export class auth_model {
 
        return { AccessToken, refreshToken };
     }
-}
 
+    static async refresh_token(refreshToken) {
+        const token_hash = hashToken(refreshToken);
+        console.log('Received refreshToken:', refreshToken);
+        console.log('Token hash:', token_hash);
+        const query = `SELECT user_id , expires_at FROM refresh_tokens WHERE token_hash = $1;`
+        try {
+           const result = await pool.query(query, [token_hash]);
+           console.log('Query result:', result.rows);
+
+              if (!result.rows.length) {
+            throw new Error('Invalid refresh token');
+        }   
+          const { user_id, expires_at } = result.rows[0];
+
+        if (result.rows[0].expires_at < new Date()) {
+             await pool.query( `Delete FROM refresh_tokens WHERE token_hash = $1;`, [token_hash] )
+            throw new Error('Refresh token expired');
+        }
+            const userResult = await pool.query(`SELECT * FROM users WHERE id = $1`, [user_id]);
+            const user = userResult.rows[0];
+             if (!user) {
+            throw new Error('User not found');
+        }
+            const tokens = await token_model.refresh_token(refreshToken,user);
+            return tokens; 
+        } catch (error) {
+            console.error('Error refreshing token:', error);
+            throw error;
+    }
+        } 
+}

@@ -8,3 +8,4 @@ authRouter.post('/register', auth_controller.registerUser);
 authRouter.post('/reg', auth_controller.registerEmployee);
 authRouter.post('/re', auth_controller.registerAdmin);
 authRouter.post('/login', auth_controller.login);
+authRouter.post('/refresh', auth_controller.refreshToken);

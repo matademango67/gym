@@ -1,3 +1,7 @@
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 anadir auth
-subir a gith
+anadir el logout
+y poner el env en gitignore
+
+
+add all the middleware to the router instead of the controller

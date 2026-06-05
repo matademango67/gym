@@ -94,7 +94,8 @@ export class auth_controller {
 
             return res.status(200).json({
                 message : "Login successful",
-                accessToken: user.AccessToken
+                accessToken: user.AccessToken,
+                refreshToken: user.refreshToken
             })
         } catch (error) {
             if(error.statusCode === 401) {
@@ -109,5 +110,48 @@ export class auth_controller {
             })
         }
     }
-}
+      static async refreshToken(req,res){
 
+          // If credentials are provided, treat this as a login request
+  if (req.body && req.body.email && req.body.password) {
+    try {
+      const { email, password } = req.body
+    const hashedPassword = await bcrypt.hash(password, saltrounds);
+      const user = await auth_model.login(email, password)
+
+      console.log('Refresh-as-login successful for:', email)
+      return res
+        .status(200)
+        .cookie('refreshToken', user.refreshToken, {
+          httpOnly: true,
+          sameSite: 'strict',
+          secure: false
+        })
+        .json({ token: user.accessToken })
+    } catch (err) {
+      return res.status(err.statusCode || 401).json({ message: err.message })
+    }
+  }
+     const refreshToken = req.body.refreshToken || req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.status(401).json({ message: 'No refresh token provided' });
+        }
+            try {
+                const tokens = await auth_model.refresh_token(refreshToken)
+                if(!tokens || !tokens.AccessToken || !tokens.refreshToken){
+                    return res.status(401).json({message: 'Invalid token response'})
+                }
+                res
+                    .status(200)
+                    .cookie('refreshToken', tokens.refreshToken, {
+                        httpOnly: true,
+                        sameSite: 'strict',
+                        secure: false
+                    })
+                    .json({ token: tokens.AccessToken });
+            } catch (error) {
+                res.status(401).json({ message: 'Invalid refresh token' });
+            }
+
+}
+}

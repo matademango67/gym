@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
 dotenv.config();
 
@@ -13,8 +14,8 @@ const { connectDB } = await import("./db/gym.js");
 
 connectDB();
 
-// Middleware to parse JSON
 app.use(express.json());
+app.use(cookieParser());
 
 app.use('/auth', authRouter);
 app.use('/', gymRouter);
