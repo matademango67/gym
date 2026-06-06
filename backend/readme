@@ -1,6 +1,6 @@
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 anadir auth
-anadir el logout
+anadir el logout y rutas protegidas
 y poner el env en gitignore
 
 

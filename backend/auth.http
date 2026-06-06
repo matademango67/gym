@@ -1,6 +1,6 @@
 ### ok 
 GET http://localhost:3000/auth/
-### ok
+### this is the customer register route
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
@@ -8,7 +8,7 @@ Content-Type: application/json
     "email": "Palanco@gmail.com",
     "password": "3333333333"
 }
-### ok
+### this is the employee register route
 POST http://localhost:3000/auth/reg
 Content-Type: application/json
 
@@ -16,7 +16,7 @@ Content-Type: application/json
     "email": "Palsanco@gmail.com",
     "password": "3333333333"
 }
-### ok
+### this is the admin register route
 POST http://localhost:3000/auth/re
 Content-Type: application/json
 
@@ -24,11 +24,35 @@ Content-Type: application/json
     "email": "Palasaaanco@gmail.com",
     "password": "3333333333"
 }
-### ok
+### this is login route
 POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "Palasaaanco@gmail.com",
+    "email": "Palsanco@gmail.com",
     "password": "3333333333"
+}
+### this is the refresh route 
+
+POST http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+    "refreshToken": "3a9884be69025ef58a4625ec3bb134dc2cbeb891236fd101028b3c6855f4c2ad6372d079c3ff8e6929294f457ed560791ea6ceec1cf8cd9ee633fdae4138bff2"
+}
+
+PATCH http://localhost:3000/auth/refresh
+Content-Type: application/json
+
+{
+    "email": "Palsanco@gmail.com",
+    "password": "3333333333"
+}
+
+### ok
+Delete http://localhost:3000/auth/logout
+Content-Type: application/json
+
+{ 
+     "refreshToken": "744b8fd0814359824238f73e269f7ff6d6a3184f1596ed405b0c533f931748d34c21adfde3e19877c42a943e82295656e2a3259f7086e9566ab343bc435a73cc"
 }

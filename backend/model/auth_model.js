@@ -108,4 +108,19 @@ export class auth_model {
             throw error;
     }
         } 
+
+        static async logout(refreshToken) {
+        if (typeof refreshToken !== 'string' || !refreshToken) return;
+
+        const tokenHash = hashToken(refreshToken);
+        try {
+            await pool.query(
+                `DELETE FROM refresh_tokens WHERE token_hash = $1`,
+                [tokenHash]
+            );
+            console.log('Token deleted successfully');
+        } catch (error) {
+            console.error('Error deleting token:', error);
+            throw error;
+        }}
 }

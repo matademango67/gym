@@ -44,16 +44,3 @@ export class token_model {
       return  { AccessToken, refreshToken : newRefreshToken };
     }
 }
-
- /*   static async logout(refreshToken){
-
-        if(typeof refreshToken !== 'string' || !refreshToken) return;
-
-         const tokenHash = hashToken(refreshToken)
-         
-         await pool.execute(
-            `DELETE FROM refresh_tokens WHERE Token_hash = ?`,
-            [tokenHash]
-         )
-    }
-} */ 
