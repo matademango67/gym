@@ -1,6 +1,6 @@
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
-import { gym_controller } from "../controller/gym_controller.js";
-import * as gymModelModule from "../model/gym_model.js";
+import { gym_controller } from "../../controller/gym_controller.js";
+import * as gymModelModule from "../../model/gym_model.js";
 
 describe("POST / - createCustomer", () => {
   let req, res;

@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {validateUser} from "../middleware/auth_validation.js";
 import {auth_model} from "../model/auth_model.js";
 import {token_model} from "../model/token_model.js";
 
@@ -17,10 +16,6 @@ export class auth_controller {
 }
 
    static async registerUser(req,res){
-    const result = validateUser(req.body)
-    if(!result.success){
-        return res.status(400).json({ error: result.error.errors });
-    }
     try {
         const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -36,10 +31,6 @@ export class auth_controller {
 }
     
     static async registerEmployee(req,res){
-    const result = validateUser(req.body)
-    if(!result.success){
-        return res.status(400).json({ error: result.error.errors });
-    }
     try {
         const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -54,11 +45,7 @@ export class auth_controller {
    }
 }
 
-      static async registerAdmin(req,res){
-    const result = validateUser(req.body)
-    if(!result.success){
-        return res.status(400).json({ error: result.error.errors });
-    }
+static async registerAdmin(req,res){
     try {
         const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -74,10 +61,6 @@ export class auth_controller {
     }
 
     static async login(req,res){
-        const result = validateUser(req.body)
-        if(!result.success){
-            return res.status(400).json({ error: result.error.errors });
-        }
         try {
             const { email, password } = req.body;
             const hashedPassword = await bcrypt.hash(password, saltrounds);
@@ -110,8 +93,31 @@ export class auth_controller {
             })
         }
     }
-      static async refreshToken(req,res){
 
+      static async update(req,res){
+        try {
+            const { email, password, new_email, new_password } = req.body;
+            const user = await auth_model.update(email, password, new_email, new_password);
+            return res.status(200).json({
+                status: "success",
+                message: "User updated successfully",
+                user: user
+            });
+      } catch (error) {
+        if(error.statusCode === 401) {
+            return res.status(401).json({
+                status: "fail",
+                message: error.message
+            })
+        }
+        return res.status(500).json({
+            status: "fail",
+            message: error.message
+        })
+    }
+}
+
+      static async refreshToken(req,res){
           // If credentials are provided, treat this as a login request
   if (req.body && req.body.email && req.body.password) {
     try {
@@ -171,4 +177,18 @@ export class auth_controller {
         res.status(500).json({ message: 'Error logging out' });
     }
 }
+
+  static async delete_user(req,res){
+    const { id } = req.params;
+    console.log(id)
+    if(!id){
+       return res.status(400).json({ message : 'Invalid id'})
+    }
+    try {
+        await auth_model.delete_user(id)
+        res.status(200).json({ message: 'user has been deleted'})
+    } catch (error) {
+       res.status(500).json({ message: 'error while deleting user'})
+    }
+  }
 }

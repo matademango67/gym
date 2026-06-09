@@ -5,6 +5,8 @@ import {role} from "../config/role.js";
 import {token_model} from "./token_model.js";
 import { hashToken , generateRefreshToken} from "../config/refresh_token.js";
 
+const saltrounds = Number(process.env.SALT_ROUNDS.trim())
+
 export class auth_model {
     static async getUsers (){
         try {
@@ -78,6 +80,30 @@ export class auth_model {
        return { AccessToken, refreshToken };
     }
 
+    static async update(email , hashedPassword, new_email, new_password){
+        const result = await pool.query(
+                    "SELECT * FROM users WHERE email = $1",
+                    [email] );
+                    const user = result.rows[0];
+                    console.log(user);
+                    console.log(email , hashedPassword, new_email, new_password);
+            if (!user) {
+                throw new Error("User not found");
+             }
+        
+        const isValid = await bcrypt.compare(hashedPassword, user.password_hash);
+        if (!isValid) {
+           throw new Error("Invalid password");
+        }
+        const newhashedPassword = await bcrypt.hash(new_password, saltrounds)
+        console.log(newhashedPassword)
+        const newUser = await pool.query(
+            "UPDATE users SET password_hash = $1 , email = $2 WHERE email = $3 RETURNING *",
+            [newhashedPassword, new_email, email]
+        );
+        return newUser.rows[0];
+    }
+
     static async refresh_token(refreshToken) {
         const token_hash = hashToken(refreshToken);
         console.log('Received refreshToken:', refreshToken);
@@ -122,5 +148,23 @@ export class auth_model {
         } catch (error) {
             console.error('Error deleting token:', error);
             throw error;
-        }}
+        }
+    }
+
+     static async delete_user(id){
+        console.log(id)
+        const user = await pool.query(
+            `SELECT * FROM users WHERE id = $1`,
+            [id])
+            try{
+                if(!user.rows.length){
+              throw new Error('user doesnt exist')
+            }
+            await pool.query(
+                `DELETE FROM users WHERE id = $1`,[id]
+              )
+            } catch (error){
+                console.error('Error deleting user:', error)
+            }
+     }
 }

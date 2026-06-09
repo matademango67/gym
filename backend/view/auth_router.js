@@ -1,12 +1,15 @@
 import { Router } from "express";
 import { auth_controller } from "../controller/auth_controller.js";
+import { validateUserMiddleware, validateUpdateMiddleware } from "../middleware/auth_validation.js";
 
 export const authRouter = Router();
 
 authRouter.get('/', auth_controller.getUsers);
-authRouter.post('/register', auth_controller.registerUser);
-authRouter.post('/reg', auth_controller.registerEmployee);
-authRouter.post('/re', auth_controller.registerAdmin);
-authRouter.post('/login', auth_controller.login);
+authRouter.post('/register', validateUserMiddleware, auth_controller.registerUser);
+authRouter.post('/reg',  validateUserMiddleware, auth_controller.registerEmployee);
+authRouter.post('/re',  validateUserMiddleware, auth_controller.registerAdmin);
+authRouter.post('/login',  validateUserMiddleware, auth_controller.login);
 authRouter.post('/refresh', auth_controller.refreshToken);
+authRouter.patch('/Update', validateUpdateMiddleware , auth_controller.update);
 authRouter.delete('/logout', auth_controller.logout);
+authRouter.delete('/delete/:id', auth_controller.delete_user);

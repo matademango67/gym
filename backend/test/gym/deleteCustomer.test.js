@@ -1,6 +1,6 @@
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
-import { gym_controller } from "../controller/gym_controller.js";
-import { gym_model } from '../model/gym_model.js';
+import { gym_controller } from "../../controller/gym_controller.js";
+import { gym_model } from '../../model/gym_model.js';
 
 describe("DELETE / - deleteCustomer", () => {
   let req, res;

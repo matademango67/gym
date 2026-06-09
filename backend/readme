@@ -1,7 +1,9 @@
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 anadir auth
 anadir el logout y rutas protegidas
-y poner el env en gitignore
+anadir un delete para que los usuarios puedan eliminarse ellos mismos
 
-
+i have to put all the refresh tokens in http only later
 add all the middleware to the router instead of the controller
+add membership and payment logic
+add tests for the new auth routes
