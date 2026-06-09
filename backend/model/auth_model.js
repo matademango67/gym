@@ -4,6 +4,8 @@ import jwt from "jsonwebtoken";
 import {role} from "../config/role.js";
 import {token_model} from "./token_model.js";
 import { hashToken , generateRefreshToken} from "../config/refresh_token.js";
+import { DatabaseError } from "pg";
+import { id } from "zod/locales";
 
 const saltrounds = Number(process.env.SALT_ROUNDS.trim())
 
@@ -167,4 +169,19 @@ export class auth_model {
                 console.error('Error deleting user:', error)
             }
      }
+
+     static async delete_me(id) {
+    try {
+        const result = await pool.query(
+            `DELETE FROM users
+             WHERE id = $1
+             RETURNING id;`,
+            [id]
+        );
+        return result.rows[0];
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        throw error;
+    }
+}
 }

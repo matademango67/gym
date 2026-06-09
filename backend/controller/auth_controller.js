@@ -179,16 +179,38 @@ static async registerAdmin(req,res){
 }
 
   static async delete_user(req,res){
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
     console.log(id)
     if(!id){
        return res.status(400).json({ message : 'Invalid id'})
     }
-    try {
         await auth_model.delete_user(id)
         res.status(200).json({ message: 'user has been deleted'})
     } catch (error) {
        res.status(500).json({ message: 'error while deleting user'})
     }
   }
+
+  static async delete_me(req,res){
+    try{
+      const id = req.user.id
+
+      const user = await auth_model.delete_me(id)
+      if(!user){
+        return res.status(404).json({ message : 'User not found'})
+      }
+
+       res.clearCookie("refreshToken");
+
+        return res.status(200).json({
+            message: "Account deleted successfully"
+        });
+
+    } catch (error){
+        return res.status(500).json({
+            message: "Internal server error"
+    })
+  }
+}
 }
