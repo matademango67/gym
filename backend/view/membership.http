@@ -1,0 +1,8 @@
+### ok 
+POST http://localhost:3000/membership/
+Content-Type: application/json
+
+{
+    "customer_id": "cb828749-2971-4d05-9884-297b9f60f3b0",
+    "type": "vip"
+}

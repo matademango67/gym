@@ -1,8 +1,8 @@
 import { jest, describe, test, expect, beforeEach } from '@jest/globals';
-import { gym_controller } from "../../controller/gym_controller.js";
-import * as gymModelModule from "../../model/gym_model.js";
+import { gym_controller } from "../../controller/gym/gym_controller.js";
+import * as gymModelModule from "../../model/gym/gym_model.js";
 
-describe("POST / - createCustomer", () => {
+describe("POST /", () => {
   let req, res;
 
   beforeEach(() => {
@@ -13,50 +13,55 @@ describe("POST / - createCustomer", () => {
         email: "john@email.com",
       },
     };
+
     res = {
       json: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis(),
     };
   });
 
-  test("should create a new customer when valid input is provided", async () => {
-    const mockNewCustomer = {
+  test("should create a customer successfully", async () => {
+    const mockCustomer = {
+      id: 1,
       name: "John",
       birth: "1990-01-01",
       email: "john@email.com",
     };
 
-    const createSpy = jest.spyOn(gymModelModule.gym_model, 'createCustomer').mockResolvedValue(mockNewCustomer);
+    const spy = jest
+      .spyOn(gymModelModule.gym_model, "createCustomer")
+      .mockResolvedValue(mockCustomer);
 
     await gym_controller.createCustomer(req, res);
 
-    expect(createSpy).toHaveBeenCalled();
+    expect(spy).toHaveBeenCalledWith( {
+      birth: "1990-01-01",
+      email: "john@email.com",
+      name: "John" }
+    );
+
     expect(res.status).toHaveBeenCalledWith(201);
-    expect(res.json).toHaveBeenCalledWith(mockNewCustomer);
-    
-    createSpy.mockRestore();
+
+    expect(res.json).toHaveBeenCalledWith(mockCustomer);
+
+    spy.mockRestore();
   });
 
-  test("should return 400 error when validation fails", async () => {
-    req.body = { name: "" }; // Empty name should fail validation
-
-    await gym_controller.createCustomer(req, res);
-
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ error: "Invalid input" });
-  });
-
-  test("should return 500 error when database insert fails", async () => {
+  test("should return 500 when customer creation fails", async () => {
     const error = new Error("Failed to create customer");
 
-    const createSpy = jest.spyOn(gymModelModule.gym_model, 'createCustomer').mockRejectedValue(error);
+    const spy = jest
+      .spyOn(gymModelModule.gym_model, "createCustomer")
+      .mockRejectedValue(error);
 
     await gym_controller.createCustomer(req, res);
 
-    expect(createSpy).toHaveBeenCalled();
     expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ error: "Failed to create customer" });
-    
-    createSpy.mockRestore();
+
+    expect(res.json).toHaveBeenCalledWith({
+      error: "Failed to create customer",
+    });
+
+    spy.mockRestore();
   });
 });

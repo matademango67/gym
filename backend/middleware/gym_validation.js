@@ -14,19 +14,10 @@ const customers = z.object({
 });
 
 const membership = z.object({
-    id: z.string().uuid(),
     customer_id: z.string().uuid(),
     type: z.enum(["normal","vip"]),
-    expire: z.date().min(new Date(), "Expiration date must be in the future"),
-    start: z.date().max(new Date(), "Start date cannot be in the future"),
-    status: z.enum(["active", 'expired', 'banned', 'paused']),
-    }).refine(
-    (data) => data.expire > data.start,
-    {
-        message: "Expire date must be after start date",
-        path: ["expire"]
-    }
-);
+    status: z.enum(["active", 'expired', 'banned', 'paused']).optional(),
+});
 
 const payments = z.object({
     id: z.string().uuid(),
@@ -35,14 +26,32 @@ const payments = z.object({
     time: z.date().max(new Date(), "Start date cannot be in the future")
 });
 
-export function Validar_customer(object){
+ function Validar_customer(object){
      return customers.safeParse(object)
 }
 
-export function Validar_membership(object){
+ function Validar_membership(object){
      return membership.safeParse(object)
 }
 
-export function Validar_payments(object){
+ function Validar_payments(object){
      return payments.safeParse(object)
 }
+
+ export function validateCustomerMiddleware(req,res,next){
+    const result = Validar_customer(req.body);
+    if(!result.success){
+        //flatten es para que el mensaje de error se vea mejor(basicamente)
+        return res.status(400).json({ error: result.error.flatten()})
+    }
+    next()
+ }
+
+  export function validateMembershipMiddleware(req,res,next){
+    const result = Validar_membership(req.body);
+    if(!result.success){
+        //flatten es para que el mensaje de error se vea mejor(basicamente)
+        return res.status(400).json({ error: result.error.flatten()})
+    }
+    next()
+ }

@@ -1,5 +1,4 @@
-import { gym_model } from "../model/gym_model.js";
-import {Validar_customer,Validar_membership,Validar_payments} from "../middleware/gym_validation.js"
+import { gym_model } from "../../model/gym/gym_model.js";
 
 export class gym_controller {
     static async getCustomers (req,res){
@@ -7,7 +6,7 @@ export class gym_controller {
             const customers = await gym_model.getCustomers();
             res.json(customers);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+           return res.status(500).json({ error: error.message });
         }
     }
 
@@ -21,20 +20,15 @@ export class gym_controller {
                 res.status(404).json({ error: "Customer not found" });
             }
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
     }
     static async createCustomer (req,res){
-        const result = Validar_customer(req.body);
-        console.log(result);
-        if (!result.success) {
-            return res.status(400).json({ error: "Invalid input" });
-        }
         try {
-            const newCustomer = await gym_model.createCustomer(result.data);
+            const newCustomer = await gym_model.createCustomer(req.body);
             res.status(201).json(newCustomer);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+          return  res.status(500).json({ error: error.message });
         }
 } 
 
@@ -47,23 +41,27 @@ export class gym_controller {
             const result = await gym_model.deleteCustomer(id);
             res.json(result);
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            return res.status(500).json({ error: error.message });
         }
         }
 
     static async UpdateCustomer (req,res){
         const { id } = req.params;
-        const result = Validar_customer(req.body);
-        if (!result.success) {
-            return res.status(400).json({ error: "Invalid input" });
-        } else if (!id) {
+        const input = req.body;
+        if (!id) {
             return res.status(400).json({ error: "ID is required" });
         }
         try {
-            await gym_model.UpdateCustomer(id, result.data);
+            await gym_model.UpdateCustomer(id,input);
             res.json({ message: "Customer updated successfully" });
         } catch (error) {
-            res.status(500).json({ error: error.message });
-        }
-}  
+    if (error.statusCode) {
+        return res.status(error.statusCode).json({
+            error: error.message
+        });
+    }
+
+    return res.status(500).json({
+        error: error.message
+    });}}
 }

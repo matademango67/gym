@@ -1,4 +1,4 @@
-import {pool} from "../db/gym.js";
+import {pool} from "../../db/gym.js";
 
 export class gym_model {
     static async getCustomers (){
@@ -68,7 +68,9 @@ static async deleteCustomer(id) {
     `,
     [name, birth, email, id]
     );
-    if (result.rowCount === 0) {
-        throw new Error("Customer not found or update failed");
-    } 
+   if (result.rowCount === 0) {
+    const error = new Error("Customer not found");
+    error.statusCode = 404;
+    throw error;
+}
 } }

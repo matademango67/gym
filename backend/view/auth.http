@@ -5,8 +5,8 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "Pal100sancos@gmail.com",
-    "password": "222222221"
+    "email": "Pal0100asaancos@gmail.com",
+    "password": "220000"
 }
 ### this is the employee register route
 POST http://localhost:3000/auth/reg
@@ -61,5 +61,9 @@ Content-Type: application/json
 }
 
 ### delete users for an admin(i think i gotta update)
-DELETE http://localhost:3000/auth/delete/bfbe8cbb-9cbb-4ffc-9b05-d389b7e9e5fd
+DELETE http://localhost:3000/auth/delete/91c2fcca-09ae-4914-b9fd-59cf9634a457
 Content-Type: application/json
+
+### this is for the users to delete themselves
+DELETE http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdmNTVjZGQ2LWJkYjItNGZiNC05YjI0LTYyNzU2ZTA3YjRhOCIsImVtYWlsIjoiUGFsc2FuY29AZ21haWwuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNzgxMDQ1NjAxLCJleHAiOjE3ODEwNDY1MDF9.5IUMsJ2sF5mxOpCesi9WEBkK2ATiTwbZzujb9YR6Aow

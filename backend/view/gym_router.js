@@ -1,10 +1,11 @@
 import { Router } from "express";
-import { gym_controller } from "../controller/gym_controller.js";
+import { gym_controller } from "../controller/gym/gym_controller.js";
+import { validateCustomerMiddleware } from "../middleware/gym_validation.js";
 
 export const gymRouter = Router();
 
 gymRouter.get('/', gym_controller.getCustomers);
 gymRouter.get('/:search', gym_controller.SearchCustomer);
-gymRouter.post('/', gym_controller.createCustomer);
+gymRouter.post('/',validateCustomerMiddleware, gym_controller.createCustomer);
 gymRouter.delete('/', gym_controller.deleteCustomer);
-gymRouter.put('/:id', gym_controller.UpdateCustomer);
+gymRouter.patch('/:id',validateCustomerMiddleware, gym_controller.UpdateCustomer);

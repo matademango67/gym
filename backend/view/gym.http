@@ -9,18 +9,18 @@ POST http://localhost:3000/
 Content-Type: application/json
 
 {
-    "name": "Marta",
+    "name": "Martali",
     "birth": "1990-05-15",
-    "email": "marta21@gmail.com"
+    "email": "marta20a1@gmail.com"
 }
 
 ### ok
 
-Put http://localhost:3000/8d360a6e-22d3-4694-b73e-c977c89bd5c1
+Patch http://localhost:3000/b7475b80-68de-4aa6-8286-232ef301648a
 Content-Type: application/json
 
 {
-    "name": "Martinesa",
+    "name": "Martineasaal",
     "birth": "1990-05-15",
     "email": "marta21@gmail.com"
 }
