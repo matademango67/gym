@@ -1,33 +1,33 @@
 
 ### ok 
-GET http://localhost:3000/
+GET http://localhost:3000/customer
 
 ### ok
-GET http://localhost:3000/Marta
+GET http://localhost:3000/customer/Marta
 ### ok
-POST http://localhost:3000/
+POST http://localhost:3000/customer
 Content-Type: application/json
 
 {
-    "name": "Martali",
+    "name": "Martalisa",
     "birth": "1990-05-15",
-    "email": "marta20a1@gmail.com"
+    "email": "maraata20a1@gmail.com"
 }
 
 ### ok
 
-Patch http://localhost:3000/b7475b80-68de-4aa6-8286-232ef301648a
+Patch http://localhost:3000/customer/cb828749-2971-4d05-9884-297b9f60f3b0
 Content-Type: application/json
 
 {
     "name": "Martineasaal",
     "birth": "1990-05-15",
-    "email": "marta21@gmail.com"
+    "email": "marta121@gmail.com"
 }
 ### ok
-DELETE  http://localhost:3000/
+DELETE  http://localhost:3000/customer
 Content-Type: application/json
 
 {
-    "id": "8d360a6e-22d3-4694-b73e-c977c89bd5c1"
+    "id": "b7475b80-68de-4aa6-8286-232ef301648b"
 }

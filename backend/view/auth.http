@@ -29,7 +29,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "Palsanco@gmail.com",
+    "email": "Palanco@gmail.com",
     "password": "3333333333"
 }
 ### this is the update user route
@@ -66,4 +66,4 @@ Content-Type: application/json
 
 ### this is for the users to delete themselves
 DELETE http://localhost:3000/auth/me
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjdmNTVjZGQ2LWJkYjItNGZiNC05YjI0LTYyNzU2ZTA3YjRhOCIsImVtYWlsIjoiUGFsc2FuY29AZ21haWwuY29tIiwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNzgxMDQ1NjAxLCJleHAiOjE3ODEwNDY1MDF9.5IUMsJ2sF5mxOpCesi9WEBkK2ATiTwbZzujb9YR6Aow
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIxNjI0OTQsImV4cCI6MTc4MjE2MzM5NH0.sxdeYtddrnoSCUXwtYOWCuJj9MubC7cA2E3P11CmRFU

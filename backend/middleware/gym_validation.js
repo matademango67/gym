@@ -19,23 +19,12 @@ const membership = z.object({
     status: z.enum(["active", 'expired', 'banned', 'paused']).optional(),
 });
 
-const payments = z.object({
-    id: z.string().uuid(),
-    customer_id: z.string().uuid(),
-    amount: z.number().positive("the amount of the payment must be a positive number"),
-    time: z.date().max(new Date(), "Start date cannot be in the future")
-});
-
  function Validar_customer(object){
      return customers.safeParse(object)
 }
 
  function Validar_membership(object){
      return membership.safeParse(object)
-}
-
- function Validar_payments(object){
-     return payments.safeParse(object)
 }
 
  export function validateCustomerMiddleware(req,res,next){

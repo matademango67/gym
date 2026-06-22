@@ -1,10 +1,17 @@
 add membership and payment logic
+despausar membersia y hacer que mientra esta pausada no pueda hacer nada
+add logic for update membership 
 
 Auth
 add tests for the new auth routes (after learning them more deeply)
-anadir el logout y rutas protegidas
 convertir las rutas del login en una sola
-delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 i have to put all the refresh tokens in http only later
 
-hacer una revision del codigo en algun dia del mes 7
+for pay user only has to click a button
+
+Admin routes 
+
+ruta de admin para ver todos los pagos
+delete es para borrar usuarios pero solo tendra acceso los employees y los admin
+
+hacer revision luego
