@@ -3,7 +3,8 @@
 GET http://localhost:3000/membership
 
 ### ok
-GET http://localhost:3000/membership/ba5e434e-0ed6-45dd-ac92-3dfb39234e43
+GET http://localhost:3000/membership/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIyNTU5MTYsImV4cCI6MTc4MjI1NjgxNn0.4965glEOoTzpae9ChmBZamhGFuz5mZvkmVy67z4o-Sw
 ### ok 
 POST http://localhost:3000/membership/
 Content-Type: application/json
@@ -12,6 +13,11 @@ Content-Type: application/json
     "customer_id": "12c04191-fbae-488d-baf3-229c506a81bd",
     "type": "vip"
 }
-### ok
-Patch http://localhost:3000/membership/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIxNjI1NTIsImV4cCI6MTc4MjE2MzQ1Mn0.2F4-iQdr-9UfKv9fChak7Eg_o4PpJzaQ6f_ZIUOKKwU
+### pausar membership
+Patch http://localhost:3000/membership/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIyNTU5MTYsImV4cCI6MTc4MjI1NjgxNn0.4965glEOoTzpae9ChmBZamhGFuz5mZvkmVy67z4o-Sw
+### ok 
+
+Patch http://localhost:3000/membership/type
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIyNTU5MTYsImV4cCI6MTc4MjI1NjgxNn0.4965glEOoTzpae9ChmBZamhGFuz5mZvkmVy67z4o-Sw
+### ok 

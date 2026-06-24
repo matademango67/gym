@@ -11,16 +11,20 @@ export class Membership_model {
         }
     }
 
-    static async search_membership(customer_id){
-        try {
-              const result = await pool.query(
-        `SELECT * FROM memberships
-         WHERE customer_id = $1`,[customer_id])
-       return result.rows.length ? result.rows : null;
-        } catch (error){
-            throw new Error
-        }
-        
+    static async search_membership(user_id){
+         const result = await pool.query(
+    `
+    SELECT m.*
+    FROM memberships m
+    JOIN customers c
+      ON c.id = m.customer_id
+    WHERE c.user_id = $1
+    `,
+    [user_id]
+);
+
+return result.rows;
+
     }
    
     static async create_membership(input){
@@ -57,7 +61,7 @@ try {
    throw new Error
 } }
 
-  static async paused_membership(user_id){
+  static async changeStatus_membership(user_id){
   const customerResult = await pool.query(
     `SELECT id FROM customers WHERE user_id = $1`,
     [user_id]
@@ -80,21 +84,61 @@ try {
 
   const status = membershipResult.rows[0].status;
 
-  if (status !== 'active') {
-    throw new Error("You can't pause your membership due to your current status");
+  if (status !== 'active' && status !== 'paused') {
+    throw new Error("You can't change your membership's status due to your current status");
   }
 
   const result = await pool.query(
   `UPDATE memberships
-   SET status = 'paused'
-   WHERE customer_id = $1`,
+SET status =
+  CASE
+    WHEN status = 'paused' THEN 'active'
+    WHEN status = 'active' THEN 'paused'
+  END
+WHERE customer_id = $1`,
   [customerId]
 );
 
   if (result.rowCount === 0) {
-    throw new Error("Membership could not be paused");
+    throw new Error("Membership's status could not be changed");
   }
 
-  return { message: "Membership paused successfully" };
+  return { message: "Membership's status changed successfully" };
 }
+
+ static async changeType_membership(user_id){
+      const membershipResult = await pool.query(`SELECT memberships.status
+        from memberships
+        JOIN customers on
+        customers.id = memberships.customer_id
+        where customers.user_id = $1`, 
+        [user_id])
+
+      if (membershipResult.rowCount === 0) {
+    throw new Error("Membership not found");
+  }
+
+  const status = membershipResult.rows[0].status;
+
+        if (status !== 'active') {
+    throw new Error("You can't change your membership's type due to your current status");
+  }
+      const result = await pool.query(
+        `UPDATE memberships m
+        SET 
+        type = CASE
+    WHEN m.type = 'vip' THEN 'normal'
+    WHEN m.type = 'normal' THEN 'vip'
+  END,
+   cost = CASE
+        WHEN m.type = 'normal' THEN 3000
+        WHEN m.type = 'vip' THEN 1500
+    END
+  from customers c
+WHERE c.id = m.customer_id
+AND c.user_id = $1
+RETURNING *;`, [user_id]
+      )
+ }
 }
+

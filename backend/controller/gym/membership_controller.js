@@ -10,9 +10,9 @@ export class gym_membership {
         }      
     }
     static async search_memberships(req,res){
-        const {customer_id} = req.params;
+        const user_id = req.user.id;
         try{
-            const membership = await Membership_model.search_membership(customer_id)
+            const membership = await Membership_model.search_membership(user_id)
             if(membership){
                res.status(200).json(membership)
             } else {
@@ -43,11 +43,11 @@ export class gym_membership {
 }
 }
 
- static async paused_membership (req,res){
+ static async changeStatus_membership (req,res){
    const user_id = req.user.id;
 
 try {
-  const result = await Membership_model.paused_membership(user_id);
+  const result = await Membership_model.changeStatus_membership(user_id);
   res.status(200).json(result);
 } catch (error) {
   console.error(error);
@@ -56,11 +56,25 @@ try {
     return res.status(404).json({ message: error.message });
   }
 
-  if (error.message.includes("can't pause")) {
+  if (error.message.includes("can't change")) {
     return res.status(400).json({ message: error.message });
   }
 
-  res.status(500).json({ message: "Something went wrong pausing the membership" });
+  return res.status(500).json({ message: "Something went wrong changing the membership's status" });
 }
- }}
+ }
+
+ static async changeType_membership(req,res){
+   const user_id = req.user.id;
+
+   try {
+    const result = await Membership_model.changeType_membership(user_id)
+    res.status(200).json(result)
+   } catch (error){
+  return res.status(500).json({
+        error: error.message
+    })
+}
+}
+}
 

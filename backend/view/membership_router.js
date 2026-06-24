@@ -6,6 +6,7 @@ import {verifyAccessToken} from "../middleware/accesstoken_validation.js";
 export const MembershipRouter = Router();
 
 MembershipRouter.get('/', gym_membership.get_memberships);
-MembershipRouter.get('/:customer_id', gym_membership.search_memberships);
+MembershipRouter.get('/me',verifyAccessToken, gym_membership.search_memberships);
 MembershipRouter.post('/',validateMembershipMiddleware , gym_membership.create_membership);
-MembershipRouter.patch('/',verifyAccessToken , gym_membership.paused_membership)
+MembershipRouter.patch('/status',verifyAccessToken , gym_membership.changeStatus_membership)
+MembershipRouter.patch('/type',verifyAccessToken , gym_membership.changeType_membership)

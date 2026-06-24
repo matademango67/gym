@@ -51,12 +51,17 @@ export class paymentsModel{
    
        await pool.query( `
        UPDATE memberships
-SET expire =
-    CASE
+SET 
+expire = CASE
         WHEN expire < CURRENT_DATE
         THEN CURRENT_DATE + INTERVAL '1 month'
         ELSE expire + INTERVAL '1 month'
-    END
+    END ,
+   status = CASE
+    WHEN expire < CURRENT_DATE
+    THEN 'active'
+    ELSE status
+END
 WHERE id = $1;`,[id]
         )
 

@@ -1,5 +1,4 @@
 add membership and payment logic
-despausar membersia y hacer que mientra esta pausada no pueda hacer nada
 add logic for update membership 
 
 Auth
@@ -15,3 +14,8 @@ ruta de admin para ver todos los pagos
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 
 hacer revision luego
+
+y ver si  las memberships expiran bien
+
+
+fix frontend 
