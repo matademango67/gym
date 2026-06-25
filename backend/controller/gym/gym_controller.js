@@ -2,8 +2,9 @@ import { gym_model } from "../../model/gym/gym_model.js";
 
 export class gym_controller {
     static async getCustomers (req,res){
+        const user_id = req.user.id
         try {
-            const customers = await gym_model.getCustomers();
+            const customers = await gym_model.getCustomers(user_id);
             res.json(customers);
         } catch (error) {
            return res.status(500).json({ error: error.message });
@@ -24,8 +25,10 @@ export class gym_controller {
         }
     }
     static async createCustomer (req,res){
+        const user_id = req.user.id
+        const input = req.body
         try {
-            const newCustomer = await gym_model.createCustomer(req.body);
+            const newCustomer = await gym_model.createCustomer(input,user_id);
             res.status(201).json(newCustomer);
         } catch (error) {
           return  res.status(500).json({ error: error.message });
@@ -33,12 +36,12 @@ export class gym_controller {
 } 
 
     static async deleteCustomer (req,res){
-        const { id } = req.body;
-        if (!id) {
-            return res.status(400).json({ error: "id is required" });
-        }
+        const user_id = req.user.id
+       // if (!id) {
+         //   return res.status(400).json({ error: "id is required" });
+       // }
         try {
-            const result = await gym_model.deleteCustomer(id);
+            const result = await gym_model.deleteCustomer(user_id);
             res.json(result);
         } catch (error) {
             return res.status(500).json({ error: error.message });
@@ -46,13 +49,13 @@ export class gym_controller {
         }
 
     static async UpdateCustomer (req,res){
-        const { id } = req.params;
+        const user_id = req.user.id
         const input = req.body;
-        if (!id) {
-            return res.status(400).json({ error: "ID is required" });
-        }
+      //  if (!id) {
+       //     return res.status(400).json({ error: "ID is required" });
+       // }
         try {
-            await gym_model.UpdateCustomer(id,input);
+            await gym_model.UpdateCustomer(user_id,input);
             res.json({ message: "Customer updated successfully" });
         } catch (error) {
     if (error.statusCode) {

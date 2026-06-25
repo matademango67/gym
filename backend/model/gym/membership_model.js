@@ -27,8 +27,8 @@ return result.rows;
 
     }
    
-    static async create_membership(input){
-         const {customer_id , type} = input
+    static async create_membership(input , user_id){
+         const { type } = input
  const query = `
         INSERT INTO memberships (customer_id, type, cost)
         VALUES (
@@ -42,6 +42,16 @@ return result.rows;
         RETURNING *;
     `;
 try {
+  const customerResult = await pool.query(
+ `SELECT id  from customers where user_id = $1` ,
+  [user_id]); 
+                               
+  if (customerResult.rowCount === 0) {
+    throw new Error("Customer not found");
+  }
+
+  const customer_id = customerResult.rows[0].id;
+
     const result = await pool.query(query, [customer_id, type]);
 
     return result.rows[0];

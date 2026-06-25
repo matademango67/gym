@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login } = useAuth()
+  const { login, checkCustomerProfile } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -21,7 +21,15 @@ const LoginPage = () => {
     try {
       setLoading(true)
       await login(email, password)
-      navigate('/dashboard')
+      
+      // Check if user has customer profile
+      const hasProfile = await checkCustomerProfile()
+      
+      if (hasProfile) {
+        navigate('/dashboard')
+      } else {
+        navigate('/customer/create')
+      }
     } catch (error) {
       console.log('Login error:', error)
     } finally {

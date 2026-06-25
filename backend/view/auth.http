@@ -5,7 +5,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "Pal0100asaancos@gmail.com",
+    "email": "Pal0100aasaancos@gmail.com",
     "password": "220000"
 }
 ### this is the employee register route
@@ -29,8 +29,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "Palanco@gmail.com",
-    "password": "3333333333"
+    "email": "Pal0100aasaancos@gmail.com",
+    "password": "220000"
 }
 ### this is the update user route
 PATCH http://localhost:3000/auth/Update
@@ -67,3 +67,9 @@ Content-Type: application/json
 ### this is for the users to delete themselves
 DELETE http://localhost:3000/auth/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIxNjI0OTQsImV4cCI6MTc4MjE2MzM5NH0.sxdeYtddrnoSCUXwtYOWCuJj9MubC7cA2E3P11CmRFU
+
+
+{
+    "email": "Palanco@gmail.com",
+    "password": "3333333333"
+}

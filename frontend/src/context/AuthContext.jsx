@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
-import { authService } from '../services'
+import { authService, customerService } from '../services'
 import toast from 'react-hot-toast'
 
 const AuthContext = createContext()
@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [hasCustomerProfile, setHasCustomerProfile] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem('accessToken')
@@ -23,6 +24,19 @@ export const AuthProvider = ({ children }) => {
     }
     setLoading(false)
   }, [])
+
+  const checkCustomerProfile = async () => {
+    try {
+      const response = await customerService.getAll()
+      const customers = Array.isArray(response.data) ? response.data : [response.data]
+      setHasCustomerProfile(customers.length > 0)
+      return customers.length > 0
+    } catch (error) {
+      console.log('Error checking customer profile:', error)
+      setHasCustomerProfile(false)
+      return false
+    }
+  }
 
   const login = async (email, password) => {
     try {
@@ -81,6 +95,8 @@ export const AuthProvider = ({ children }) => {
     user,
     loading,
     isAuthenticated,
+    hasCustomerProfile,
+    checkCustomerProfile,
     login,
     register,
     logout,

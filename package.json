@@ -1,0 +1,10 @@
+{
+  "name": "gym-root",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently \"pnpm --dir backend dev\" \"pnpm --dir frontend dev\""
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}

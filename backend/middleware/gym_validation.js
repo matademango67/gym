@@ -9,8 +9,7 @@ const customers = z.object({
     ).transform((date) => new Date(date)).refine(
         (date) => date >= new Date("1935-01-01") && date <= new Date("2011-01-01"),
         "Birth date must be between 1935-01-01 and 2011-01-01 (customer must be 15+ years old)"
-    ),
-    email: z.string().email("Invalid email address"),
+    )
 });
 
 const membership = z.object({
