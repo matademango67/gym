@@ -70,6 +70,7 @@ const DashboardPage = () => {
     // Small delay to ensure backend has processed the payment
     setTimeout(() => {
       fetchPayments()
+      fetchMemberships()
     }, 500)
   }
 
@@ -245,7 +246,7 @@ const DashboardPage = () => {
                     <tr key={payment.id} className="border-b border-gray-200 hover:bg-gray-50 transition">
                       <td className="px-6 py-4 text-sm text-gray-800">{payment.id}</td>
                       <td className="px-6 py-4 text-sm text-gray-800">${payment.amount}</td>
-                      <td className="px-6 py-4 text-sm text-gray-800 capitalize">{payment.method}</td>
+                      <td className="px-6 py-4 text-sm text-gray-800 capitalize">automatic</td>
                       <td className="px-6 py-4 text-sm">
                         <span className="badge-active">
                           approved

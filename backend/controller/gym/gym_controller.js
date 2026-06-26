@@ -37,9 +37,6 @@ export class gym_controller {
 
     static async deleteCustomer (req,res){
         const user_id = req.user.id
-       // if (!id) {
-         //   return res.status(400).json({ error: "id is required" });
-       // }
         try {
             const result = await gym_model.deleteCustomer(user_id);
             res.json(result);
@@ -51,9 +48,6 @@ export class gym_controller {
     static async UpdateCustomer (req,res){
         const user_id = req.user.id
         const input = req.body;
-      //  if (!id) {
-       //     return res.status(400).json({ error: "ID is required" });
-       // }
         try {
             await gym_model.UpdateCustomer(user_id,input);
             res.json({ message: "Customer updated successfully" });

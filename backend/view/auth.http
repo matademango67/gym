@@ -5,7 +5,7 @@ POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "Pal0100aasaancos@gmail.com",
+    "email": "Pa1l0100aasaancos@gmail.com",
     "password": "220000"
 }
 ### this is the employee register route
@@ -29,7 +29,7 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-    "email": "Pal0100aasaancos@gmail.com",
+    "email": "Pa1l0100aasaancos@gmail.com",
     "password": "220000"
 }
 ### this is the update user route

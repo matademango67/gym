@@ -69,8 +69,8 @@ const CreateMembershipModal = ({ isOpen, onClose, onSuccess, required = false })
               className="input-field"
               disabled={loading}
             >
-              <option value="normal">Normal - $15/month</option>
-              <option value="vip">VIP - $30/month</option>
+              <option value="normal">Normal - $1500/month</option>
+              <option value="vip">VIP - $3000/month</option>
             </select>
           </div>
 
