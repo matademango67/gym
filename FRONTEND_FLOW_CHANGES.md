@@ -38,10 +38,11 @@ Dashboard/Main Application
 ## Files Created
 
 ### 4. `frontend/src/pages/CreateCustomerPage.jsx` (NEW)
-- Form with three fields: name, birth date, email
+- Form with two fields: name, birth date
 - **No user_id field** - backend automatically adds it from JWT token
+- **No email field** - backend gets email from authenticated user
 - Validates all fields before submission
-- Calls `POST /customer` with `{name, birth, email}`
+- Calls `POST /customer` with `{name, birth}`
 - Redirects to dashboard on success
 
 ## Backend Alignment
@@ -78,5 +79,5 @@ The frontend now correctly follows the backend logic:
 
 - Customer name: required, max 30 characters
 - Birth date: valid date, must be between 1935-01-01 and 2011-01-01 (15+ years old)
-- Email: valid email format
+- Email: not required (backend uses authenticated user's email)
 - All validation matches backend Zod schema

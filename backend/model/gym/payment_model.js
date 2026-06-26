@@ -9,7 +9,7 @@ export class paymentsModel{
             JOIN memberships m on m.id = p.memberships_id
             JOIN customers c on c.id = m.customer_id
             WHERE c.user_id =$1`, [user_id])
-            return result.rows.length ? result.rows : null;
+            return result.rows;
         }catch (Error){
               throw new Error
         }

@@ -36,7 +36,7 @@ export class gym_model {
          WHERE id = $1`,[user_id]
       ) 
 
-      const email = select_email.rows[0]
+      const email = select_email.rows[0].email
     
       const result = await pool.query(
         `

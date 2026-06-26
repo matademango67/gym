@@ -55,6 +55,9 @@ export const paymentService = {
   getAll: () =>
     api.get('/payments'),
 
+  getMyPayments: () =>
+    api.get('/payments'),
+
   create: (data) =>
     api.post('/payments', data),
 }

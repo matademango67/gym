@@ -13,7 +13,6 @@ const customers = z.object({
 });
 
 const membership = z.object({
-    customer_id: z.string().uuid(),
     type: z.enum(["normal","vip"]),
     status: z.enum(["active", 'expired', 'banned', 'paused']).optional(),
 });

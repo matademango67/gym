@@ -26,7 +26,7 @@ const CreateCustomerPage = () => {
       
       // Navigate to dashboard after successful creation
       setTimeout(() => {
-        navigate('/dashboard')
+        navigate('/dashboard', { state: { showCreateMembership: true } })
       }, 1000)
     } catch (error) {
       const message = error.response?.data?.error || 'Failed to create customer profile'

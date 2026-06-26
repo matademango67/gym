@@ -29,20 +29,7 @@ return result.rows;
    
     static async create_membership(input , user_id){
          const { type } = input
- const query = `
-        INSERT INTO memberships (customer_id, type, cost)
-        VALUES (
-            $1,
-            $2,
-            CASE
-                WHEN $2 = 'normal' THEN 1500
-                WHEN $2 = 'vip' THEN 3000
-            END
-        )
-        RETURNING *;
-    `;
-try {
-  const customerResult = await pool.query(
+         const customerResult = await pool.query(
  `SELECT id  from customers where user_id = $1` ,
   [user_id]); 
                                
@@ -52,7 +39,22 @@ try {
 
   const customer_id = customerResult.rows[0].id;
 
-    const result = await pool.query(query, [customer_id, type]);
+  const query = `
+        INSERT INTO memberships (cost , customer_id , type)
+        VALUES (
+            CASE
+                WHEN $1 = 'normal' THEN 1500
+                WHEN $1 = 'vip' THEN 3000
+            END,
+            $2,
+            $1
+        )
+        RETURNING *;
+    `;
+try {
+  console.log(user_id)
+  
+    const result = await pool.query(query, [type, customer_id]);
 
     return result.rows[0];
 

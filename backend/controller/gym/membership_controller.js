@@ -25,9 +25,10 @@ export class gym_membership {
 
     }
     static async create_membership (req,res){
+        const user_id = req.user.id;
         const input = req.body;
         try {
-            const newMembership = await Membership_model.create_membership(input);
+            const newMembership = await Membership_model.create_membership(input, user_id);
             res.status(201).json(newMembership);
         } catch (error) {
 

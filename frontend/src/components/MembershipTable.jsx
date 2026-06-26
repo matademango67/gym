@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-const MembershipTable = ({ memberships, loading, onEdit, onDelete, filterStatus, searchTerm }) => {
+const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filterStatus, searchTerm }) => {
   const filteredMemberships = useMemo(() => {
     return memberships.filter((membership) => {
       const matchesStatus = !filterStatus || membership.status === filterStatus
@@ -15,11 +15,56 @@ const MembershipTable = ({ memberships, loading, onEdit, onDelete, filterStatus,
         return <span className="badge-active">Active</span>
       case 'expired':
         return <span className="badge-expired">Expired</span>
-      case 'pending':
-        return <span className="badge-pending">Pending</span>
+      case 'banned':
+        return <span className="badge-expired">Banned</span>
+      case 'paused':
+        return <span className="badge-pending">Paused</span>
       default:
         return <span className="badge-pending">{status}</span>
     }
+  }
+
+  const formatDate = (dateValue) => {
+    // Handle null, undefined, or empty values
+    if (!dateValue || dateValue === null || dateValue === undefined) return '—'
+    
+    // If it's a number (timestamp), convert it
+    if (typeof dateValue === 'number') {
+      const date = new Date(dateValue)
+      if (isNaN(date.getTime())) return 'Invalid Date'
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric' 
+      })
+    }
+    
+    // Convert to string for processing
+    const dateString = String(dateValue)
+    
+    // Handle 'Invalid Date' string
+    if (dateString === 'Invalid Date') return '—'
+    
+    // Try to parse the date
+    let date
+    if (dateString.includes('T')) {
+      // ISO format: 2024-01-15T10:30:00.000Z
+      date = new Date(dateString)
+    } else if (dateString.includes('-')) {
+      // Date format: 2024-01-15
+      const [year, month, day] = dateString.split('-')
+      date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+    } else {
+      // Try direct parsing
+      date = new Date(dateString)
+    }
+    
+    if (isNaN(date.getTime())) return 'Invalid Date'
+    return date.toLocaleDateString('en-US', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    })
   }
 
   if (loading) {
@@ -60,24 +105,35 @@ const MembershipTable = ({ memberships, loading, onEdit, onDelete, filterStatus,
               <td className="px-6 py-4 text-sm">{getStatusBadge(membership.status)}</td>
               <td className="px-6 py-4 text-sm text-gray-800">${membership.cost}</td>
               <td className="px-6 py-4 text-sm text-gray-600">
-                {new Date(membership.created_at).toLocaleDateString()}
+                {formatDate(membership.created_at)}
               </td>
               <td className="px-6 py-4 text-sm text-gray-600">
-                {membership.expire ? new Date(membership.expire).toLocaleDateString() : '—'}
+                {formatDate(membership.expire)}
               </td>
               <td className="px-6 py-4 text-center">
                 <div className="flex justify-center gap-2">
                   <button
+                    onClick={() => {}}
+                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
+                  >
+                    Delete
+                  </button>
+                  <button
                     onClick={() => onEdit(membership)}
                     className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                    title="Change status (Active ↔ Paused)"
                   >
                     Edit
                   </button>
                   <button
-                    onClick={() => onDelete(membership)}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
+                    onClick={() => onPauseActivate(membership)}
+                    className={`px-3 py-1 text-sm rounded hover:opacity-80 transition ${
+                      membership.status === 'paused' 
+                        ? 'bg-green-600 text-white' 
+                        : 'bg-yellow-600 text-white'
+                    }`}
                   >
-                    Delete
+                    {membership.status === 'paused' ? 'Activate' : 'Pause'}
                   </button>
                 </div>
               </td>

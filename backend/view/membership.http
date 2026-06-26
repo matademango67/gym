@@ -7,10 +7,10 @@ GET http://localhost:3000/membership/me
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImM2NDdlYTUzLTczNzMtNDczNS1iZTczLTQ3MDYyOThlNjJmZiIsImVtYWlsIjoiUGFsYW5jb0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIyNTU5MTYsImV4cCI6MTc4MjI1NjgxNn0.4965glEOoTzpae9ChmBZamhGFuz5mZvkmVy67z4o-Sw
 ### ok 
 POST http://localhost:3000/membership/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImFhZjM2MjZhLTJjNGQtNDI5MS1iZmUzLTgyZDIxNTRlMGEzMyIsImVtYWlsIjoiUGExbDAxMDBhYXNhYW5jb3NAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzgyNDQ2NjczLCJleHAiOjE3ODI0NDc1NzN9.23FU1JEX24jnGpgYAGnkmUHTxAgZCk-QKfJPG-ieP0M
 Content-Type: application/json
 
 {
-    "customer_id": "12c04191-fbae-488d-baf3-229c506a81bd",
     "type": "vip"
 }
 ### pausar membership
