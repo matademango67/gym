@@ -13,6 +13,18 @@ import { paymentsModel } from "../../model/gym/payment_model.js"
         });
     }
 }
+
+ static async get_allpayments(req,res){
+    try{
+        const result = await paymentsModel.get_allpayments()
+        return res.status(200).json(result);
+    } catch (error) {
+        return res.status(500).json({
+            error: error.message
+        });
+    }}
+
+
  static async create_payment(req,res){
     const user_id = req.user.id;
     try{

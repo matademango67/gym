@@ -11,6 +11,15 @@ export class gym_controller {
         }
     }
 
+    static async getAllCustomers (req,res){
+        try {
+            const customers = await gym_model.getAllCustomers();
+            res.json(customers);
+        } catch (error) {
+           return res.status(500).json({ error: error.message });
+        }
+    }
+
     static async SearchCustomer (req,res){
         const { search } = req.params;
         try {

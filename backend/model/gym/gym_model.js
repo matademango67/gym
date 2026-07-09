@@ -13,6 +13,16 @@ export class gym_model {
         }
     };
 
+    static async getAllCustomers() {
+        const result = await pool.query(`SELECT * FROM customers`);
+         const rows = result.rows;
+        if(rows.length === 0){
+            throw new Error("error")
+        } else{
+             return rows;
+        }
+    }
+
    static async SearchCustomer(search) {
     const result = await pool.query(
         `

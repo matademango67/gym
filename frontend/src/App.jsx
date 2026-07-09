@@ -18,7 +18,7 @@ function App() {
           <Route
             path="/customer/create"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['customer']}>
                 <CreateCustomerPage />
               </ProtectedRoute>
             }
@@ -26,7 +26,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['customer']}>
                 <DashboardPage />
               </ProtectedRoute>
             }
@@ -34,7 +34,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['admin', 'employee']}>
                 <AdminDashboard />
               </ProtectedRoute>
             }

@@ -2,7 +2,19 @@
 
 export class Membership_model {
     static async get_memberships(){
-        const result = await pool.query(`SELECT * FROM memberships`);
+        const result = await pool.query(`
+            SELECT 
+                m.id,
+                m.type,
+                m.status,
+                m.cost,
+                m.customer_id,
+                c.user_id,
+                m.start as start_date,
+                m.expire as end_date
+            FROM memberships m
+            JOIN customers c ON c.id = m.customer_id
+        `);
         const rows = result.rows;
         if(rows.length === 0){
             throw new Error("error")
@@ -14,7 +26,15 @@ export class Membership_model {
     static async search_membership(user_id){
          const result = await pool.query(
     `
-    SELECT m.*
+    SELECT 
+        m.id,
+        m.type,
+        m.status,
+        m.cost,
+        m.customer_id,
+        c.user_id,
+        m.start as start_date,
+        m.expire as end_date
     FROM memberships m
     JOIN customers c
       ON c.id = m.customer_id

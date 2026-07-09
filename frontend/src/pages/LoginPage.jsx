@@ -7,7 +7,7 @@ const LoginPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
-  const { login, checkCustomerProfile } = useAuth()
+  const { login, checkCustomerProfile, user } = useAuth()
   const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
@@ -20,15 +20,25 @@ const LoginPage = () => {
 
     try {
       setLoading(true)
-      await login(email, password)
+      const response = await login(email, password)
       
-      // Check if user has customer profile
-      const hasProfile = await checkCustomerProfile()
+      // Decode the access token to get user role
+      const accessToken = response.accessToken
+      const payload = JSON.parse(atob(accessToken.split('.')[1]))
+      const userRole = payload.role
       
-      if (hasProfile) {
-        navigate('/dashboard')
+      // If user is admin, redirect directly to admin panel
+      if (userRole === 'admin') {
+        navigate('/admin')
       } else {
-        navigate('/customer/create')
+        // For non-admin users, check if they have customer profile
+        const hasProfile = await checkCustomerProfile()
+        
+        if (hasProfile) {
+          navigate('/dashboard')
+        } else {
+          navigate('/customer/create')
+        }
       }
     } catch (error) {
       console.log('Login error:', error)

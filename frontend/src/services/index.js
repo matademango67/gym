@@ -78,7 +78,10 @@ export const adminService = {
 
   // Customers - Admin view (all customers)
   getAllCustomers: () =>
-    api.get('/customer'),
+    api.get('/admin/customers'),
+
+  searchCustomer: (search) =>
+    api.get(`/admin/findcustomer/${search}`),
 
   updateCustomer: (id, data) =>
     api.patch(`/customer/${id}`, data),
@@ -89,5 +92,5 @@ export const adminService = {
 
   // Payments - Admin view (all payments)
   getAllPayments: () =>
-    api.get('/payments'),
+    api.get('/admin/payments'),
 }

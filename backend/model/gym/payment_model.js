@@ -15,6 +15,21 @@ export class paymentsModel{
         }
     }
 
+    static async get_allpayments(){
+        try{
+            const result = await pool.query(`
+            SELECT p.*, u.email as customer_email, c.user_id
+            FROM payments p
+            JOIN memberships m on m.id = p.memberships_id
+            JOIN customers c on c.id = m.customer_id
+            JOIN users u on u.id = c.user_id`)
+            return result.rows;
+        }catch (Error){
+            throw new Error
+        }
+
+    }
+
     static async create_payment(user_id){
     try {
         const membershipResult = await pool.query(

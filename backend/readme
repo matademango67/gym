@@ -21,3 +21,6 @@ fix frontend
 hacer que cuando el status sea inactive o banned no se pueda acceder a el
 disable create payment button 
 hacer que el frontend solo aparezca el login panel no el customer 
+asignar un role al employees
+
+quiero que anadas el getallcustomer routes al admin dashboard en customers y el search customers routes para la barra de busqueda en customers

@@ -44,16 +44,6 @@ const Navbar = () => {
               </p>
             </div>
 
-            {/* Show Admin link only for admin and employee roles */}
-            {isAdminOrEmployee && (
-              <button
-                onClick={() => navigate('/admin')}
-                className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-200"
-              >
-                Admin Panel
-              </button>
-            )}
-
             <button
               onClick={handleDeactivateAccount}
               className="px-4 py-2 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors duration-200"

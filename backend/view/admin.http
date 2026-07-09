@@ -1,13 +1,22 @@
 ### this is the admin route to get all users
-GET http://localhost:3000/admin/
+GET http://localhost:3000/admin/users
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+### this is the admin route to get all customers
+
+GET http://localhost:3000/admin/customers
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjIzNjUyLCJleHAiOjE3ODM2MjQ1NTJ9.TR8kZhJeHFFxFp5qjvVeD_TmXUwBftAkW_wTQwaI-9Y
 ### this is the admin register route
+
+GET http://localhost:3000/admin/as
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjIzNjUyLCJleHAiOjE3ODM2MjQ1NTJ9.TR8kZhJeHFFxFp5qjvVeD_TmXUwBftAkW_wTQwaI-9Y
+### this is the admin register route
+
 POST http://localhost:3000/admin/register
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjIzMjY2LCJleHAiOjE3ODM2MjQxNjZ9.bD3oVbcwaAhtMQ1bu60aP6nTchwsgStmTRrqaTZumJM
 Content-Type: application/json
 
 {
-    "email": "adminad@gmail.com",
+    "email": "adminasd@gmail.com",
     "password": "3333333333"
 }
 
@@ -30,3 +39,7 @@ Content-Type: application/json
     "status": "inactive",
     "status_reason": "User requested account deletion"
 }
+
+### this is the admin register route
+GET http://localhost:3000/admin/payments
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjI1MTQyLCJleHAiOjE3ODM2MjYwNDJ9.jjrfTNXhB_ncCx3PKXszkAqgwmIrsf6V8nWax2OBwoI

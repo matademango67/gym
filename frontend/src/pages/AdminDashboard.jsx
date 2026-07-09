@@ -49,13 +49,18 @@ const AdminDashboard = () => {
     }
   }
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = async (searchTerm = '') => {
     try {
       setCustomersLoading(true)
-      // TODO: Verify this endpoint returns all customers for admin view
-      // Backend endpoint: GET /customer (requires admin/employee role)
-      const response = await adminService.getAllCustomers()
-      setCustomers(Array.isArray(response.data) ? response.data : [response.data])
+      if (searchTerm) {
+        // Use search endpoint if search term is provided
+        const response = await adminService.searchCustomer(searchTerm)
+        setCustomers(Array.isArray(response.data) ? response.data : [response.data])
+      } else {
+        // Use getAll endpoint if no search term
+        const response = await adminService.getAllCustomers()
+        setCustomers(Array.isArray(response.data) ? response.data : [response.data])
+      }
     } catch (error) {
       const message = error.response?.data?.error || 'Failed to fetch customers'
       toast.error(message)
@@ -67,9 +72,7 @@ const AdminDashboard = () => {
   const fetchPayments = async () => {
     try {
       setPaymentsLoading(true)
-      // TODO: Verify this endpoint returns all payments for admin view
-      // Backend endpoint: GET /payments (requires admin/employee role)
-      // Note: Currently this endpoint might only return payments for the authenticated user
+      // Backend endpoint: GET /admin/payments (requires admin/employee role)
       const response = await adminService.getAllPayments()
       setPayments(Array.isArray(response.data) ? response.data : [response.data])
     } catch (error) {
@@ -97,7 +100,7 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     if (activeSection === 'users') fetchUsers()
-    if (activeSection === 'customers') fetchCustomers()
+    if (activeSection === 'customers') fetchCustomers(customersSearch)
     if (activeSection === 'payments') fetchPayments()
     if (activeSection === 'memberships') fetchMemberships()
   }, [activeSection])
@@ -135,11 +138,17 @@ const AdminDashboard = () => {
     }
   }
 
-  const handleChangeUserStatus = async (userId, status, reason) => {
+  const handleChangeUserStatus = async (userId, status) => {
+    const reason = prompt(`Please enter the reason for changing status to "${status}":`)
+    if (!reason || reason.trim() === '') {
+      toast.error('Please provide a reason for the status change')
+      return
+    }
+
     try {
       // TODO: Verify this endpoint works for all status changes (active, inactive, banned)
       // Backend endpoint: PATCH /admin/setUserStatus (requires admin role)
-      await adminService.setUserStatus(userId, status, reason)
+      await adminService.setUserStatus(userId, status, reason.trim())
       toast.success('User status updated successfully!')
       fetchUsers()
     } catch (error) {
@@ -164,6 +173,17 @@ const AdminDashboard = () => {
 
   const scrollToSection = (section) => {
     setActiveSection(section)
+    // Reset search when switching to customers section
+    if (section === 'customers') {
+      setCustomersSearch('')
+      fetchCustomers()
+    }
+  }
+
+  const handleCustomerSearch = (e) => {
+    const value = e.target.value
+    setCustomersSearch(value)
+    fetchCustomers(value)
   }
 
   // Filter functions
@@ -264,12 +284,6 @@ const AdminDashboard = () => {
             >
               Payments
             </button>
-            <button
-              onClick={handleLogout}
-              className="px-6 py-4 font-semibold text-red-600 hover:text-red-700 hover:bg-red-50 transition-colors duration-200 ml-auto"
-            >
-              Logout
-            </button>
           </div>
         </div>
 
@@ -319,6 +333,7 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Role</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status Reason</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                   </thead>
@@ -341,22 +356,25 @@ const AdminDashboard = () => {
                             {user.status || 'active'}
                           </span>
                         </td>
+                        <td className="px-6 py-4 text-sm text-gray-600">
+                          {user.status_reason || '—'}
+                        </td>
                         <td className="px-6 py-4 text-sm">
-                          <div className="flex gap-2 flex-wrap">
+                            <div className="flex gap-2 flex-wrap">
                             <button
-                              onClick={() => handleChangeUserStatus(user.id, 'active', 'Activated by admin')}
+                              onClick={() => handleChangeUserStatus(user.id, 'active')}
                               className="px-3 py-1 rounded bg-green-600 text-white text-xs font-semibold hover:bg-green-700 transition-colors"
                             >
                               Activate
                             </button>
                             <button
-                              onClick={() => handleChangeUserStatus(user.id, 'inactive', 'Deactivated by admin')}
+                              onClick={() => handleChangeUserStatus(user.id, 'inactive')}
                               className="px-3 py-1 rounded bg-red-600 text-white text-xs font-semibold hover:bg-red-700 transition-colors"
                             >
                               Deactivate
                             </button>
                             <button
-                              onClick={() => handleChangeUserStatus(user.id, 'banned', 'Banned by admin')}
+                              onClick={() => handleChangeUserStatus(user.id, 'banned')}
                               className="px-3 py-1 rounded bg-gray-600 text-white text-xs font-semibold hover:bg-gray-700 transition-colors"
                             >
                               Ban
@@ -471,7 +489,7 @@ const AdminDashboard = () => {
                 type="text"
                 placeholder="Search customers by name, email, or ID..."
                 value={customersSearch}
-                onChange={(e) => setCustomersSearch(e.target.value)}
+                onChange={handleCustomerSearch}
                 className="input-field"
               />
             </div>
@@ -489,7 +507,7 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">ID</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Phone</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Birth Date</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                   </thead>
@@ -499,7 +517,7 @@ const AdminDashboard = () => {
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.id}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.name}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.email}</td>
-                        <td className="px-6 py-4 text-sm text-gray-800">{customer.phone || '—'}</td>
+                        <td className="px-6 py-4 text-sm text-gray-800">{formatDate(customer.birth)}</td>
                         <td className="px-6 py-4 text-sm">
                           <button
                             onClick={() => {
@@ -706,14 +724,14 @@ const CreateUserModal = ({ title, onSubmit, onClose, role }) => {
 const EditCustomerModal = ({ customer, onSave, onClose }) => {
   const [name, setName] = useState(customer?.name || '')
   const [email, setEmail] = useState(customer?.email || '')
-  const [phone, setPhone] = useState(customer?.phone || '')
+  const [birth, setBirth] = useState(customer?.birth || '')
   const [loading, setLoading] = useState(false)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     try {
-      await onSave(customer.id, { name, email, phone })
+      await onSave(customer.id, { name, email, birth })
     } catch (error) {
       // Error handled in parent
     } finally {
@@ -747,12 +765,13 @@ const EditCustomerModal = ({ customer, onSave, onClose }) => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Birth Date</label>
             <input
-              type="tel"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
+              type="date"
+              value={birth}
+              onChange={(e) => setBirth(e.target.value)}
               className="input-field"
+              required
             />
           </div>
           <div className="flex gap-3">
