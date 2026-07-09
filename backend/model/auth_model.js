@@ -4,8 +4,6 @@ import jwt from "jsonwebtoken";
 import {role} from "../config/role.js";
 import {token_model} from "./token_model.js";
 import { hashToken , generateRefreshToken} from "../config/refresh_token.js";
-import { DatabaseError } from "pg";
-import { id } from "zod/locales";
 
 const saltrounds = Number(process.env.SALT_ROUNDS.trim())
 
@@ -19,35 +17,11 @@ export class auth_model {
         }
     }
 
-    static async registerUser(email ,hashedPassword) {
+    static async registerUser(email ,hashedPassword , role){
         try {
             const result = await pool.query(
-                "INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING *",
-                [email, hashedPassword]
-            );
-            return result.rows[0];
-        } catch (error) {        
-    throw new Error("Error registering user: " + error.message);
-        }
-    }
-
-    static async registerEmployee(email ,hashedPassword) {
-        try {
-            const result = await pool.query(
-                "INSERT INTO users (email, password_hash, role) VALUES ($1, $2,'employee') RETURNING *",
-                [email, hashedPassword]
-            );
-            return result.rows[0];
-        } catch (error) {        
-    throw new Error("Error registering user: " + error.message);
-        }
-    }
-
-    static async registerAdmin(email ,hashedPassword) {
-        try {
-            const result = await pool.query(
-                "INSERT INTO users (email, password_hash,role) VALUES ($1, $2,'admin') RETURNING *",
-                [email, hashedPassword]
+                "INSERT INTO users (email, password_hash , role) VALUES ($1, $2, $3) RETURNING *",
+                [email, hashedPassword , role]
             );
             return result.rows[0];
         } catch (error) {        
@@ -153,30 +127,35 @@ export class auth_model {
         }
     }
 
-     static async delete_user(id){
-        console.log(id)
+     static async setUserStatus(input){   //admin route
+        const {user_id, status, status_reason} = input
         const user = await pool.query(
             `SELECT * FROM users WHERE id = $1`,
-            [id])
+            [user_id])
             try{
                 if(!user.rows.length){
               throw new Error('user doesnt exist')
             }
             await pool.query(
-                `DELETE FROM users WHERE id = $1`,[id]
+                `UPDATE users
+                 SET
+                status_reason = $3,
+                status = $2
+                 WHERE id = $1`,[user_id,status, status_reason]
               )
             } catch (error){
                 console.error('Error deleting user:', error)
             }
      }
 
-     static async delete_me(id) {
+     static async delete_me(user_id) {
     try {
         const result = await pool.query(
-            `DELETE FROM users
-             WHERE id = $1
-             RETURNING id;`,
-            [id]
+           `UPDATE users
+            SET status = 'inactive'
+            WHERE id = $1
+             RETURNING *`,[user_id]
+            
         );
         return result.rows[0];
     } catch (error) {

@@ -14,10 +14,10 @@ ruta de admin para ver todos los pagos
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 
 hacer revision luego
-
 y ver si  las memberships expiran bien
 
 
 fix frontend 
-anadir eliminar customer
+hacer que cuando el status sea inactive o banned no se pueda acceder a el
 disable create payment button 
+hacer que el frontend solo aparezca el login panel no el customer 

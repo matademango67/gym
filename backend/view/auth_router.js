@@ -6,11 +6,9 @@ export const authRouter = Router();
 
 authRouter.get('/', auth_controller.getUsers);
 authRouter.post('/register', validateUserMiddleware, auth_controller.registerUser);
-authRouter.post('/reg',  validateUserMiddleware, auth_controller.registerEmployee);
-authRouter.post('/re',  validateUserMiddleware, auth_controller.registerAdmin);
 authRouter.post('/login',  validateUserMiddleware, auth_controller.login);
 authRouter.post('/refresh', auth_controller.refreshToken);
 authRouter.patch('/Update', validateUpdateMiddleware , auth_controller.update);
 authRouter.delete('/logout', auth_controller.logout);
 authRouter.delete('/me' , verifyAccessToken, auth_controller.delete_me)
-authRouter.delete('/delete/:id', auth_controller.delete_user);
+

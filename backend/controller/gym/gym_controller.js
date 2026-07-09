@@ -35,15 +35,15 @@ export class gym_controller {
         }
 } 
 
-    static async deleteCustomer (req,res){
+   /* static async deleteCustomer (req,res){
         const user_id = req.user.id
         try {
             const result = await gym_model.deleteCustomer(user_id);
             res.json(result);
         } catch (error) {
             return res.status(500).json({ error: error.message });
-        }
-        }
+        } 
+        } */
 
     static async UpdateCustomer (req,res){
         const user_id = req.user.id

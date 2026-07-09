@@ -15,11 +15,11 @@ export class auth_controller {
         }
 }
 
-   static async registerUser(req,res){
+   static async registerUser(req,res,role){
     try {
         const { email, password } = req.body;
         const hashedPassword = await bcrypt.hash(password, saltrounds);
-        const user = await auth_model.registerUser(email, hashedPassword);
+        const user = await auth_model.registerUser(email, hashedPassword , role);
         res.status(201).json(user);
     } catch (error) {
         if(error.statusCode === 409) {
@@ -29,36 +29,6 @@ export class auth_controller {
       return res.status(500).json({ error: error.message });
    }
 }
-    
-    static async registerEmployee(req,res){
-    try {
-        const { email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, saltrounds);
-        const user = await auth_model.registerEmployee(email, hashedPassword);
-        res.status(201).json(user);
-    } catch (error) {
-        if(error.statusCode === 409) {
-            return res.status(409).json({ message: error.message });
-        }
-        console.error(error);
-      return res.status(500).json({ error: error.message });
-   }
-}
-
-static async registerAdmin(req,res){
-    try {
-        const { email, password } = req.body;
-        const hashedPassword = await bcrypt.hash(password, saltrounds);
-        const user = await auth_model.registerAdmin(email, hashedPassword);
-        res.status(201).json(user);
-    } catch (error) {
-        if(error.statusCode === 409) {
-            return res.status(409).json({ message: error.message });
-        }
-        console.error(error);
-      return res.status(500).json({ error: error.message });
-   }
-    }
 
     static async login(req,res){
         try {
@@ -178,25 +148,20 @@ static async registerAdmin(req,res){
     }
 }
 
-  static async delete_user(req,res){
+  static async setUserStatus(req,res){
     try {
-        const { id } = req.params;
-    console.log(id)
-    if(!id){
-       return res.status(400).json({ message : 'Invalid id'})
-    }
-        await auth_model.delete_user(id)
-        res.status(200).json({ message: 'user has been deleted'})
+    const input = req.body
+    await auth_model.setUserStatus(input)
+        res.status(200).json({ message: 'user status updated successfully'})
     } catch (error) {
-       res.status(500).json({ message: 'error while deleting user'})
+       res.status(500).json({ message: 'error while updating users status'})
     }
   }
 
   static async delete_me(req,res){
     try{
-      const id = req.user.id
-
-      const user = await auth_model.delete_me(id)
+      const user_id = req.user.id
+      const user = await auth_model.delete_me(user_id)
       if(!user){
         return res.status(404).json({ message : 'User not found'})
       }

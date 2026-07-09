@@ -1,0 +1,32 @@
+### this is the admin route to get all users
+GET http://localhost:3000/admin/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+### this is the admin register route
+POST http://localhost:3000/admin/register
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+Content-Type: application/json
+
+{
+    "email": "adminad@gmail.com",
+    "password": "3333333333"
+}
+
+### this is the admin register route
+POST http://localhost:3000/admin/register/employee
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+Content-Type: application/json
+
+{
+    "email": "employee@gmail.com",
+    "password": "3333333333"
+}
+### this is for the admins to change the state to inactive for the users
+PATCH http://localhost:3000/admin/setUserStatus
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
+Content-Type: application/json
+
+{
+    "user_id": "8be0e5de-d586-4640-ae8c-991852ccd969",
+    "status": "inactive",
+    "status_reason": "User requested account deletion"
+}

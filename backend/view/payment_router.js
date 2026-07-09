@@ -5,4 +5,3 @@ export const PaymentRouter = Router();
 
 PaymentRouter.get('/' ,verifyAccessToken,paymentController.get_mypayments )
 PaymentRouter.post('/' ,verifyAccessToken,paymentController.create_payment)
-

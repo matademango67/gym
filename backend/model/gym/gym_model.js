@@ -53,7 +53,7 @@ export class gym_model {
     }
   }
   
-static async deleteCustomer(user_id) {
+/*static async deleteCustomer(user_id) {
     const result = await pool.query(
         `
         DELETE FROM customers
@@ -66,7 +66,7 @@ static async deleteCustomer(user_id) {
     } else {
         return { message: "Customer deleted successfully" };
     }
-}
+}*/
 
  static async UpdateCustomer(user_id, input) {
     const { name, birth, email } = input;

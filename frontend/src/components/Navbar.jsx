@@ -2,13 +2,29 @@ import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
-  const { user, logout } = useAuth()
+  const { user, logout, deleteAccount } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     await logout()
     navigate('/login')
   }
+
+  const handleDeactivateAccount = async () => {
+    const confirmed = window.confirm(
+      'Are you sure you want to deactivate your account? After disabling the account, only the staff can activate it.'
+    )
+    
+    if (confirmed) {
+      try {
+        await deleteAccount()
+      } catch (error) {
+        // Error is already handled in AuthContext
+      }
+    }
+  }
+
+  const isAdminOrEmployee = user?.role === 'admin' || user?.role === 'employee'
 
   return (
     <nav className="bg-white shadow-md border-b border-gray-200 sticky top-0 z-50">
@@ -27,6 +43,23 @@ const Navbar = () => {
                 Welcome, <span className="font-semibold text-gray-800">{user?.email}</span>
               </p>
             </div>
+
+            {/* Show Admin link only for admin and employee roles */}
+            {isAdminOrEmployee && (
+              <button
+                onClick={() => navigate('/admin')}
+                className="px-4 py-2 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-colors duration-200"
+              >
+                Admin Panel
+              </button>
+            )}
+
+            <button
+              onClick={handleDeactivateAccount}
+              className="px-4 py-2 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors duration-200"
+            >
+              Deactivate Account
+            </button>
 
             <button
               onClick={handleLogout}

@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
       // Decode token to get user info (basic approach)
       try {
         const payload = JSON.parse(atob(token.split('.')[1]))
-        setUser({ id: payload.id, email: payload.email })
+        setUser({ id: payload.id, email: payload.email, role: payload.role })
       } catch (error) {
         console.log('Could not decode token')
       }
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('refreshToken', refreshToken)
 
       const payload = JSON.parse(atob(accessToken.split('.')[1]))
-      setUser({ id: payload.id, email: payload.email })
+      setUser({ id: payload.id, email: payload.email, role: payload.role })
       setIsAuthenticated(true)
 
       toast.success('Login successful!')
@@ -91,6 +91,22 @@ export const AuthProvider = ({ children }) => {
     }
   }
 
+  const deleteAccount = async () => {
+    try {
+      await authService.deleteMe()
+      toast.success('Account deactivated successfully')
+      localStorage.removeItem('accessToken')
+      localStorage.removeItem('refreshToken')
+      setUser(null)
+      setIsAuthenticated(false)
+      window.location.href = '/login'
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to deactivate account'
+      toast.error(message)
+      throw error
+    }
+  }
+
   const value = {
     user,
     loading,
@@ -100,6 +116,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
+    deleteAccount,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -113,12 +113,6 @@ const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filter
               <td className="px-6 py-4 text-center">
                 <div className="flex justify-center gap-2">
                   <button
-                    onClick={() => {}}
-                    className="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700 transition"
-                  >
-                    Delete
-                  </button>
-                  <button
                     onClick={() => onEdit(membership)}
                     className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
                     title="Change status (Active ↔ Paused)"

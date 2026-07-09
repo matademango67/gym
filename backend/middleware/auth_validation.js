@@ -12,12 +12,30 @@ const updateSchema = z.object({
     new_password: z.string().min(6, "Password must be at least 6 characters long").optional()
 });
 
+const statusSchema = z.object({
+   user_id : z.uuid() , status: z.enum(['active', 'inactive' , 'banned'], {
+        errorMap: () => ({ message: "Status must be either 'active' , 'banned' or 'inactive'" })
+    }) , status_reason: z.string().min(1, "Status reason is required")
+});
+
  function validateUser(body) {
     return userSchema.safeParse(body);
 }   
 
  function validateUpdate(body) {
     return updateSchema.safeParse(body);
+}
+
+function validateStatus(body) {
+    return statusSchema.safeParse(body);
+}
+
+export function validateStatusMiddleware(req, res, next) {
+    const result = validateStatus(req.body);
+    if (!result.success) {
+        return res.status(400).json({ error: result.error.flatten() });
+    }
+    next();
 }
 
 export function validateUserMiddleware(req,res,next){
