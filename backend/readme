@@ -1,19 +1,15 @@
-add membership and payment logic
+
 add logic for update membership 
 
 Auth
 add tests for the new auth routes (after learning them more deeply)
-convertir las rutas del login en una sola
 i have to put all the refresh tokens in http only later
 
 for pay user only has to click a button
 
 Admin routes 
 
-ruta de admin para ver todos los pagos
 delete es para borrar usuarios pero solo tendra acceso los employees y los admin
-
-hacer revision luego
 y ver si  las memberships expiran bien
 
 
@@ -23,4 +19,9 @@ disable create payment button
 hacer que el frontend solo aparezca el login panel no el customer 
 asignar un role al employees
 
-quiero que anadas el getallcustomer routes al admin dashboard en customers y el search customers routes para la barra de busqueda en customers
+edit button on membership para editar todo
+problema en customer edit
+anadir cambiar contrasena
+implementar lo del status al login directamente
+hacer que el mensaje del status salga en el frontend
+ask ia which memberships it uses on the customers dashboard

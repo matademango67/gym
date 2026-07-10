@@ -134,9 +134,16 @@ const DashboardPage = () => {
       // ISO format: 2024-01-15T10:30:00.000Z
       date = new Date(dateString)
     } else if (dateString.includes('-')) {
-      // Date format: 2024-01-15
-      const [year, month, day] = dateString.split('-')
-      date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+      // Handle PostgreSQL timestamp format: "2024-01-15 14:30:00"
+      if (dateString.includes(' ')) {
+        const [datePart, timePart] = dateString.split(' ')
+        const [year, month, day] = datePart.split('-')
+        date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+      } else {
+        // Date format: 2024-01-15
+        const [year, month, day] = dateString.split('-')
+        date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day))
+      }
     } else {
       // Try direct parsing
       date = new Date(dateString)

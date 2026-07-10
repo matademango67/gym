@@ -1,4 +1,5 @@
 import axios from 'axios'
+import toast from 'react-hot-toast'
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000'
 
@@ -46,6 +47,11 @@ api.interceptors.response.use(
         window.location.href = '/login'
         return Promise.reject(refreshError)
       }
+    }
+
+    // Display error messages from verifyAccess middleware and other errors
+    if (error.response?.data?.message) {
+      toast.error(error.response.data.message)
     }
 
     return Promise.reject(error)
