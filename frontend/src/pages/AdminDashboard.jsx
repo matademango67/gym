@@ -177,9 +177,9 @@ const AdminDashboard = () => {
     }
   }
 
-  const handleChangeMembershipType = async (membershipId) => {
+  const handleChangeMembershipType = async (membership) => {
     try {
-      await adminService.changeMembershipType(membershipId)
+      await adminService.changeMembershipType(membership.user_id)
       toast.success('Membership type changed successfully!')
       fetchMemberships()
     } catch (error) {
@@ -188,9 +188,9 @@ const AdminDashboard = () => {
     }
   }
 
-  const handleChangeMembershipStatus = async (membershipId) => {
+  const handleChangeMembershipStatus = async (membership) => {
     try {
-      await adminService.changeMembershipStatus(membershipId)
+      await adminService.changeMembershipStatus(membership.user_id)
       toast.success('Membership status updated successfully!')
       fetchMemberships()
     } catch (error) {
@@ -270,7 +270,7 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
@@ -462,6 +462,7 @@ const AdminDashboard = () => {
                     <tr className="bg-gray-50 border-b border-gray-200">
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">ID</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">User ID</th>
+                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Type</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Start Date</th>
@@ -474,6 +475,7 @@ const AdminDashboard = () => {
                       <tr key={membership.id} className="border-b border-gray-200 hover:bg-gray-50 transition">
                         <td className="px-6 py-4 text-sm text-gray-800">{membership.id}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{membership.user_id}</td>
+                        <td className="px-6 py-4 text-sm text-gray-800">{membership.email}</td>
                         <td className="px-6 py-4 text-sm text-gray-800 capitalize">{membership.type}</td>
                         <td className="px-6 py-4 text-sm">
                           <span className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${
@@ -493,14 +495,14 @@ const AdminDashboard = () => {
                         <td className="px-6 py-4 text-sm">
                           <div className="flex gap-2 flex-wrap">
                             <button
-                              onClick={() => handleChangeMembershipType(membership.id)}
+                              onClick={() => handleChangeMembershipType(membership)}
                               className="px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
                               title="Change membership type (Normal/VIP)"
                             >
                               Edit Type
                             </button>
                             <button
-                              onClick={() => handleChangeMembershipStatus(membership.id)}
+                              onClick={() => handleChangeMembershipStatus(membership)}
                               className={`px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${
                                 membership.status === 'paused'
                                   ? 'bg-green-600 hover:bg-green-700'

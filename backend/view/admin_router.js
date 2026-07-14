@@ -13,13 +13,13 @@ AdminRouter.get('/',verifyAccessToken, verifyEmployee, auth_controller.getUsers)
 AdminRouter.get('/customers',verifyAccessToken, verifyEmployee, gym_controller.getAllCustomers);
 AdminRouter.get('/findcustomer/:search',verifyAccessToken,verifyEmployee, gym_controller.SearchCustomer);
 AdminRouter.get('/memberships',verifyAccessToken, verifyEmployee, gym_membership.get_memberships);
+AdminRouter.patch('/memberships/type',verifyAccessToken , verifyEmployee, gym_membership.changeType_membership)
 AdminRouter.patch('/setUserStatus',verifyAccessToken, verifyEmployee,validateStatusMiddleware, auth_controller.setUserStatus)
+AdminRouter.patch('/memberships/status',verifyAccessToken, verifyEmployee, gym_membership.changeStatus_membership);
 AdminRouter.post('/register', verifyAccessToken, verifyAdmin, validateUserMiddleware, (req, res) => auth_controller.registerUser(req, res, "admin"));
 AdminRouter.post('/register/employee', verifyAccessToken, verifyAdmin, validateUserMiddleware, (req, res) => auth_controller.registerUser(req, res, "employee"));
 AdminRouter.get('/payments',verifyAccessToken, verifyAdmin, paymentController.get_allpayments);
-//
-//AdminRouter.patch('/updatemembership/status',verifyAccessToken, verifyAdmin, gym_membership.changeStatus_membership);
-//AdminRouter.patch('/updatemembership/type',verifyAccessToken, verifyAdmin, gym_membership.changeType_membership);
+
 
 
       

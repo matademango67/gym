@@ -82,7 +82,7 @@ const DashboardPage = () => {
 
   const handleEditClick = async (membership) => {
     try {
-      await membershipService.changeType()
+      await membershipService.changeType(membership.user_id)
       toast.success('Membership type changed successfully!')
       fetchMemberships()
     } catch (error) {
@@ -93,7 +93,7 @@ const DashboardPage = () => {
 
   const handlePauseActivateClick = async (membership) => {
     try {
-      await membershipService.changeStatus()
+      await membershipService.changeStatus(membership.user_id)
       toast.success('Membership status updated successfully!')
       fetchMemberships()
     } catch (error) {
@@ -293,6 +293,7 @@ const DashboardPage = () => {
             onPauseActivate={handlePauseActivateClick}
             filterStatus={filterStatus}
             searchTerm={searchTerm}
+            showEditButton={false}
           />
             </div>
           ) : (

@@ -47,11 +47,11 @@ export const membershipService = {
   create: (data) =>
     api.post('/membership', data),
 
-  changeStatus: () =>
-    api.patch('/membership/status'),
+  changeStatus: (userId) =>
+    api.patch('/membership/status', { user_id: userId }),
 
-  changeType: () =>
-    api.patch('/membership/type'),
+  changeType: (userId) =>
+    api.patch('/membership/type', { user_id: userId }),
 }
 
 export const paymentService = {
@@ -94,11 +94,11 @@ export const adminService = {
     api.get('/admin/memberships'),
 
   // Membership management - Admin
-  changeMembershipStatus: (membershipId) =>
-    api.patch('/admin/updatemembership/status', { membership_id: membershipId }),
+  changeMembershipStatus: (userId) =>
+    api.patch('/admin/memberships/status', { user_id: userId }),
 
-  changeMembershipType: (membershipId) =>
-    api.patch('/admin/updatemembership/type', { membership_id: membershipId }),
+  changeMembershipType: (userId) =>
+    api.patch('/admin/memberships/type', { user_id: userId }),
 
   // Payments - Admin view (all payments)
   getAllPayments: () =>

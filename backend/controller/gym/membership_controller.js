@@ -45,7 +45,7 @@ export class gym_membership {
 }
 
  static async changeStatus_membership (req,res){
-   const user_id = req.user.id;
+   const user_id = req.params.id || req.body.user_id;
 
 try {
   const result = await Membership_model.changeStatus_membership(user_id);
@@ -66,7 +66,8 @@ try {
  }
 
  static async changeType_membership(req,res){
-   const user_id = req.user.id;
+   const user_id = req.body.user_id
+   console.log("user_id:", user_id); // Log the user_id to check its value
 
    try {
     const result = await Membership_model.changeType_membership(user_id)
@@ -76,6 +77,4 @@ try {
         error: error.message
     })
 }
-}
-}
-
+ }}

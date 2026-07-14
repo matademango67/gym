@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filterStatus, searchTerm }) => {
+const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filterStatus, searchTerm, showEditButton = true }) => {
   const filteredMemberships = useMemo(() => {
     return memberships.filter((membership) => {
       const matchesStatus = !filterStatus || membership.status === filterStatus
@@ -119,13 +119,15 @@ const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filter
               </td>
               <td className="px-6 py-4 text-center">
                 <div className="flex justify-center gap-2">
-                  <button
-                    onClick={() => onEdit(membership)}
-                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                    title="Change status (Active ↔ Paused)"
-                  >
-                    Edit
-                  </button>
+                  {showEditButton && (
+                    <button
+                      onClick={() => onEdit(membership)}
+                      className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                      title="Change status (Active ↔ Paused)"
+                    >
+                      Edit
+                    </button>
+                  )}
                   <button
                     onClick={() => onPauseActivate(membership)}
                     className={`px-3 py-1 text-sm rounded hover:opacity-80 transition ${

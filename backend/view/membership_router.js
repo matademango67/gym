@@ -9,4 +9,3 @@ export const MembershipRouter = Router();
 MembershipRouter.get('/me',verifyAccessToken, gym_membership.search_memberships);
 MembershipRouter.post('/',verifyAccessToken, verifyAccess, validateMembershipMiddleware , gym_membership.create_membership);
 MembershipRouter.patch('/status',verifyAccessToken , verifyAccess, gym_membership.changeStatus_membership)
-MembershipRouter.patch('/type',verifyAccessToken , verifyAccess, gym_membership.changeType_membership)

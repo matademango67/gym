@@ -10,10 +10,12 @@ export class Membership_model {
                 m.cost,
                 m.customer_id,
                 c.user_id,
+                u.email,
                 m.start as start_date,
                 m.expire as end_date
             FROM memberships m
             JOIN customers c ON c.id = m.customer_id
+            JOIN users u ON u.id = c.user_id
         `);
         const rows = result.rows;
         if(rows.length === 0){
@@ -33,11 +35,13 @@ export class Membership_model {
         m.cost,
         m.customer_id,
         c.user_id,
+        u.email,
         m.start as start_date,
         m.expire as end_date
     FROM memberships m
     JOIN customers c
       ON c.id = m.customer_id
+    JOIN users u ON u.id = c.user_id
     WHERE c.user_id = $1
     `,
     [user_id]
@@ -138,6 +142,7 @@ WHERE customer_id = $1`,
   return { message: "Membership's status changed successfully" };
 }
 
+
   static async changeType_membership(user_id){
        const membershipResult = await pool.query(`SELECT memberships.status
          from memberships
@@ -173,73 +178,5 @@ WHERE customer_id = $1`,
       )
  }
 
-  // Admin method to change membership type by membership_id
-  static async changeType_membership_admin(membership_id){
-    try {
-      const result = await pool.query(
-        `UPDATE memberships m
-        SET 
-        type = CASE
-    WHEN m.type = 'vip' THEN 'normal'
-    WHEN m.type = 'normal' THEN 'vip'
-  END,
-   cost = CASE
-        WHEN m.type = 'normal' THEN 3000
-        WHEN m.type = 'vip' THEN 1500
-    END
-  WHERE m.id = $1
-  RETURNING *;`, [membership_id]
-      )
-      
-      if (result.rowCount === 0) {
-        throw new Error("Membership not found");
-      }
-      
-      return { message: "Membership type changed successfully" };
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  // Admin method to change membership status by membership_id
-  static async changeStatus_membership_admin(membership_id){
-    try {
-      // First get the current status
-      const membershipResult = await pool.query(
-        `SELECT status FROM memberships WHERE id = $1`,
-        [membership_id]
-      );
-
-      if (membershipResult.rowCount === 0) {
-        throw new Error("Membership not found");
-      }
-
-      const status = membershipResult.rows[0].status;
-
-      if (status !== 'active' && status !== 'paused') {
-        throw new Error("You can't change this membership's status due to its current status");
-      }
-
-      const result = await pool.query(
-        `UPDATE memberships
-        SET status =
-        CASE
-          WHEN status = 'paused' THEN 'active'
-          WHEN status = 'active' THEN 'paused'
-        END
-        WHERE id = $1
-        RETURNING *;`,
-        [membership_id]
-      );
-
-      if (result.rowCount === 0) {
-        throw new Error("Membership's status could not be changed");
-      }
-
-      return { message: "Membership's status changed successfully" };
-    } catch (error) {
-      throw error;
-    }
-  }
 }
 
