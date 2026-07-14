@@ -1,12 +1,14 @@
 ### ok 
 GET http://localhost:3000/auth/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVmYTBhOGRhLWRkN2ItNGM2Yi1hNjM0LTk4NzE5YzU0N2VlNCIsImVtYWlsIjoiUGFzMTBhc2FAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzgzOTg1MjY2LCJleHAiOjE3ODM5ODYxNjZ9.t9d2bS4vPzb5Innrx807k5s9vO73RXyDDtTq-honUww
+
 ### this is the customer register route
 POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
-    "email": "Pa11l0100aasaancos@gmail.com",
-    "password": "220000"
+    "email": "Pas10asa@gmail.com",
+    "password": "2200000"
 }
 
 ### this is login route
@@ -14,8 +16,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-     "email": "admin121@gmail.com",
-    "password": "3333333333"
+     "email": "Pas10asa@gmail.com",
+    "password": "2200000"
 }
 ### this is the update user route
 PATCH http://localhost:3000/auth/Update

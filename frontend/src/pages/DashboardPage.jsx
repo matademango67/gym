@@ -5,13 +5,13 @@ import Navbar from '../components/Navbar'
 import MembershipTable from '../components/MembershipTable'
 import CreateMembershipModal from '../components/CreateMembershipModal'
 import EditMembershipModal from '../components/EditMembershipModal'
-import { membershipService, paymentService } from '../services'
+import { membershipService, paymentService, authService, customerService } from '../services'
 import { useAuth } from '../context/AuthContext'
 import PaymentModal from '../components/PaymentModal'
 
 const DashboardPage = () => {
   const location = useLocation()
-  const { user } = useAuth()
+  const { user, updateUser } = useAuth()
   const [memberships, setMemberships] = useState([])
   const [payments, setPayments] = useState([])
   const [loading, setLoading] = useState(true)
@@ -22,10 +22,16 @@ const DashboardPage = () => {
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [selectedMembership, setSelectedMembership] = useState(null)
+  const [showDeactivateModal, setShowDeactivateModal] = useState(false)
+  const [showEditProfileModal, setShowEditProfileModal] = useState(false)
+  
+  // User status from backend
+  const [userData, setUserData] = useState(null)
 
   useEffect(() => {
     fetchMemberships()
     fetchPayments()
+    fetchUserStatus()
   }, [])
 
   useEffect(() => {
@@ -93,6 +99,52 @@ const DashboardPage = () => {
     } catch (error) {
       const message = error.response?.data?.error || 'Failed to update membership status'
       toast.error(message)
+    }
+  }
+
+  const handleDeactivateAccount = async (reason) => {
+    try {
+      await authService.deleteMe(reason)
+      toast.success('Account deactivated successfully')
+      setShowDeactivateModal(false)
+      // Redirect to login or show appropriate message
+      setTimeout(() => {
+        window.location.href = '/login'
+      }, 2000)
+    } catch (error) {
+      const message = error.response?.data?.message || 'Failed to deactivate account'
+      toast.error(message)
+    }
+  }
+
+  const handleUpdateProfile = async (data) => {
+    try {
+      // Update customer profile
+      await customerService.update(null, data)
+      toast.success('Profile updated successfully!')
+      setShowEditProfileModal(false)
+      // Refresh user data
+      fetchUserStatus()
+    } catch (error) {
+      const message = error.response?.data?.error || 'Failed to update profile'
+      toast.error(message)
+    }
+  }
+
+  const fetchUserStatus = async () => {
+    try {
+      const response = await authService.getMe()
+      console.log('User status response:', response.data) // Debug log
+      // The backend returns { message: "...", user: {...} }
+      const userData = response.data.user || response.data
+      setUserData(userData)
+      // Update the auth context with the fresh user data
+      if (updateUser && userData) {
+        updateUser(userData)
+      }
+    } catch (error) {
+      console.error('Failed to fetch user status:', error)
+      // Don't show error toast for this - it's not critical
     }
   }
 
@@ -168,29 +220,47 @@ const DashboardPage = () => {
           <p className="text-gray-600">Manage your gym memberships and payments</p>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {Object.keys(statusCounts).length > 0 ? (
-            Object.entries(statusCounts).map(([status, count]) => {
-              const statusColors = {
-                active: 'from-green-50 to-emerald-50 border-green-600',
-                expired: 'from-red-50 to-rose-50 border-red-600',
-                banned: 'from-gray-50 to-gray-100 border-gray-600',
-                paused: 'from-yellow-50 to-amber-50 border-yellow-600',
-              }
-              const colors = statusColors[status] || 'from-blue-50 to-indigo-50 border-blue-600'
-              
-              return (
-                <div key={status} className={`card p-6 bg-gradient-to-br ${colors} border-l-4`}>
-                  <p className="text-gray-600 text-sm font-medium capitalize">{status}</p>
+        {/* User Status Card */}
+        <div className="mb-8">
+          <div className="card p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-600">
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Account Status</h3>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <span className={`inline-block px-4 py-2 rounded-full text-sm font-semibold ${
+                  userData?.status === 'active'
+                    ? 'bg-green-100 text-green-800'
+                    : userData?.status === 'inactive'
+                    ? 'bg-red-100 text-red-800'
+                    : userData?.status === 'banned'
+                    ? 'bg-gray-100 text-gray-800'
+                    : 'bg-gray-100 text-gray-800'
+                }`}>
+                  {userData?.status ? userData.status.charAt(0).toUpperCase() + userData.status.slice(1) : 'Active'}
+                </span>
+                <span className="text-gray-600 text-sm">
+                  {userData?.status === 'active' ? 'Your account is active' : 
+                   userData?.status === 'inactive' ? 'Your account is deactivated' :
+                   userData?.status === 'banned' ? 'Your account is banned' : 'Account status unknown'}
+                </span>
+              </div>
+              {userData?.status === 'active' && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setShowEditProfileModal(true)}
+                    className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded hover:bg-blue-700 transition-colors"
+                  >
+                    Edit Profile
+                  </button>
+                  <button
+                    onClick={() => setShowDeactivateModal(true)}
+                    className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded hover:bg-red-700 transition-colors"
+                  >
+                    Deactivate Account
+                  </button>
                 </div>
-              )
-            })
-          ) : (
-            <div className="col-span-full card p-6 bg-gray-50 border-l-4 border-gray-600">
-              <p className="text-gray-600">No membership status to display</p>
+              )}
             </div>
-          )}
+          </div>
         </div>
 
         {/* Membership Section */}
@@ -260,7 +330,7 @@ const DashboardPage = () => {
                         </span>
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-600">
-                        {formatDate(payment.created_at)}
+                        {formatDate(payment.time)}
                       </td>
                     </tr>
                   ))}
@@ -289,6 +359,171 @@ const DashboardPage = () => {
       />
 
       {/* EditMembershipModal removed - status change now happens on click */}
+
+      {/* Edit Profile Modal */}
+      {showEditProfileModal && (
+        <EditProfileModal
+          customer={userData}
+          onSave={handleUpdateProfile}
+          onClose={() => setShowEditProfileModal(false)}
+        />
+      )}
+
+      {/* Deactivate Account Modal */}
+      {showDeactivateModal && (
+        <DeactivateAccountModal
+          onConfirm={handleDeactivateAccount}
+          onClose={() => setShowDeactivateModal(false)}
+        />
+      )}
+    </div>
+  )
+}
+
+// Edit Profile Modal Component
+const EditProfileModal = ({ customer, onSave, onClose }) => {
+  const [name, setName] = useState(customer?.name || '')
+  const [birth, setBirth] = useState(customer?.birth || '')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await onSave({ name, birth })
+    } catch (error) {
+      // Error handled in parent
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h3 className="text-2xl font-bold text-gray-800 mb-4">Edit Profile</h3>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="input-field"
+              required
+            />
+          </div>
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Birth Date</label>
+            <input
+              type="date"
+              value={birth}
+              onChange={(e) => setBirth(e.target.value)}
+              className="input-field"
+              required
+              max={new Date().toISOString().split('T')[0]}
+              style={{
+                colorScheme: 'light'
+              }}
+            />
+            <style>{`
+              input[type="date"]::-webkit-calendar-picker-indicator {
+                display: none;
+                -webkit-appearance: none;
+              }
+              input[type="date"]::-moz-calendar-picker-indicator {
+                display: none;
+              }
+            `}</style>
+            <p className="text-xs text-gray-500 mt-1">Click the field and use arrow keys to adjust the date</p>
+          </div>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary flex-1"
+            >
+              {loading ? 'Saving...' : 'Save Changes'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
+
+// Deactivate Account Modal Component
+const DeactivateAccountModal = ({ onConfirm, onClose }) => {
+  const [reason, setReason] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!reason.trim()) {
+      toast.error('Please provide a reason for deactivating your account')
+      return
+    }
+    setLoading(true)
+    try {
+      await onConfirm(reason)
+    } catch (error) {
+      // Error handled in parent
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">Deactivate Account</h3>
+        <p className="text-gray-600 mb-6">
+          Are you sure you want to deactivate your account? This action cannot be undone.
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Reason for Deactivation <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              className="input-field"
+              rows="4"
+              placeholder="Please provide a reason for deactivating your account..."
+              required
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              This reason will be logged and visible to administrators.
+            </p>
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary flex-1"
+            >
+              {loading ? 'Deactivating...' : 'Confirm Deactivation'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   )
 }

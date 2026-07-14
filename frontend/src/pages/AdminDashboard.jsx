@@ -33,7 +33,9 @@ const AdminDashboard = () => {
   const [showCreateAdminModal, setShowCreateAdminModal] = useState(false)
   const [showEditCustomerModal, setShowEditCustomerModal] = useState(false)
   const [showEditMembershipModal, setShowEditMembershipModal] = useState(false)
+  const [showStatusChangeModal, setShowStatusChangeModal] = useState(false)
   const [selectedItem, setSelectedItem] = useState(null)
+  const [statusChangeData, setStatusChangeData] = useState({ userId: null, status: null })
 
   // Fetch functions
   const fetchUsers = async () => {
@@ -139,17 +141,21 @@ const AdminDashboard = () => {
   }
 
   const handleChangeUserStatus = async (userId, status) => {
-    const reason = prompt(`Please enter the reason for changing status to "${status}":`)
+    setStatusChangeData({ userId, status })
+    setShowStatusChangeModal(true)
+  }
+
+  const handleStatusChangeConfirm = async (reason) => {
     if (!reason || reason.trim() === '') {
       toast.error('Please provide a reason for the status change')
       return
     }
 
     try {
-      // TODO: Verify this endpoint works for all status changes (active, inactive, banned)
-      // Backend endpoint: PATCH /admin/setUserStatus (requires admin role)
-      await adminService.setUserStatus(userId, status, reason.trim())
+      await adminService.setUserStatus(statusChangeData.userId, statusChangeData.status, reason.trim())
       toast.success('User status updated successfully!')
+      setShowStatusChangeModal(false)
+      setStatusChangeData({ userId: null, status: null })
       fetchUsers()
     } catch (error) {
       const message = error.response?.data?.message || 'Failed to update user status'
@@ -167,6 +173,28 @@ const AdminDashboard = () => {
       fetchCustomers()
     } catch (error) {
       const message = error.response?.data?.error || 'Failed to update customer'
+      toast.error(message)
+    }
+  }
+
+  const handleChangeMembershipType = async (membershipId) => {
+    try {
+      await adminService.changeMembershipType(membershipId)
+      toast.success('Membership type changed successfully!')
+      fetchMemberships()
+    } catch (error) {
+      const message = error.response?.data?.error || 'Failed to change membership type'
+      toast.error(message)
+    }
+  }
+
+  const handleChangeMembershipStatus = async (membershipId) => {
+    try {
+      await adminService.changeMembershipStatus(membershipId)
+      toast.success('Membership status updated successfully!')
+      fetchMemberships()
+    } catch (error) {
+      const message = error.response?.data?.error || 'Failed to update membership status'
       toast.error(message)
     }
   }
@@ -300,20 +328,22 @@ const AdminDashboard = () => {
           <div className="card p-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
               <h2 className="text-2xl font-bold text-gray-800">Users Management</h2>
-              <div className="flex flex-wrap gap-3">
-                <button
-                  onClick={() => setShowCreateEmployeeModal(true)}
-                  className="btn-primary"
-                >
-                  + Create Employee
-                </button>
-                <button
-                  onClick={() => setShowCreateAdminModal(true)}
-                  className="btn-success"
-                >
-                  + Create Admin
-                </button>
-              </div>
+              {user?.role === 'admin' && (
+                <div className="flex flex-wrap gap-3">
+                  <button
+                    onClick={() => setShowCreateEmployeeModal(true)}
+                    className="btn-primary"
+                  >
+                    + Create Employee
+                  </button>
+                  <button
+                    onClick={() => setShowCreateAdminModal(true)}
+                    className="btn-success"
+                  >
+                    + Create Admin
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Search Bar */}
@@ -461,15 +491,26 @@ const AdminDashboard = () => {
                         <td className="px-6 py-4 text-sm text-gray-600">{formatDate(membership.start_date)}</td>
                         <td className="px-6 py-4 text-sm text-gray-600">{formatDate(membership.end_date)}</td>
                         <td className="px-6 py-4 text-sm">
-                          <button
-                            onClick={() => {
-                              setSelectedItem(membership)
-                              setShowEditMembershipModal(true)
-                            }}
-                            className="btn-primary text-xs"
-                          >
-                            Edit
-                          </button>
+                          <div className="flex gap-2 flex-wrap">
+                            <button
+                              onClick={() => handleChangeMembershipType(membership.id)}
+                              className="px-3 py-1 rounded bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 transition-colors"
+                              title="Change membership type (Normal/VIP)"
+                            >
+                              Edit Type
+                            </button>
+                            <button
+                              onClick={() => handleChangeMembershipStatus(membership.id)}
+                              className={`px-3 py-1 rounded text-white text-xs font-semibold transition-colors ${
+                                membership.status === 'paused'
+                                  ? 'bg-green-600 hover:bg-green-700'
+                                  : 'bg-yellow-600 hover:bg-yellow-700'
+                              }`}
+                              title={membership.status === 'paused' ? 'Activate membership' : 'Pause membership'}
+                            >
+                              {membership.status === 'paused' ? 'Activate' : 'Pause'}
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
@@ -516,27 +557,15 @@ const AdminDashboard = () => {
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
                       <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Birth Date</th>
-                      <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                     </tr>
                   </thead>
-                  <tbody>
+                    <tbody>
                     {filteredCustomers.map((customer) => (
                       <tr key={customer.id} className="border-b border-gray-200 hover:bg-gray-50 transition">
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.id}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.name}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{customer.email}</td>
                         <td className="px-6 py-4 text-sm text-gray-800">{formatDate(customer.birth)}</td>
-                        <td className="px-6 py-4 text-sm">
-                          <button
-                            onClick={() => {
-                              setSelectedItem(customer)
-                              setShowEditCustomerModal(true)
-                            }}
-                            className="btn-primary text-xs"
-                          >
-                            Edit
-                          </button>
-                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -596,7 +625,7 @@ const AdminDashboard = () => {
                         <td className="px-6 py-4 text-sm">
                           <span className="badge-active">{payment.status || 'approved'}</span>
                         </td>
-                        <td className="px-6 py-4 text-sm text-gray-600">{formatDate(payment.created_at)}</td>
+                        <td className="px-6 py-4 text-sm text-gray-600">{formatDate(payment.time)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -655,6 +684,18 @@ const AdminDashboard = () => {
             fetchMemberships()
             setShowEditMembershipModal(false)
             setSelectedItem(null)
+          }}
+        />
+      )}
+
+      {/* Status Change Modal */}
+      {showStatusChangeModal && (
+        <StatusChangeModal
+          status={statusChangeData.status}
+          onConfirm={handleStatusChangeConfirm}
+          onClose={() => {
+            setShowStatusChangeModal(false)
+            setStatusChangeData({ userId: null, status: null })
           }}
         />
       )}
@@ -731,7 +772,6 @@ const CreateUserModal = ({ title, onSubmit, onClose, role }) => {
 // Edit Customer Modal Component
 const EditCustomerModal = ({ customer, onSave, onClose }) => {
   const [name, setName] = useState(customer?.name || '')
-  const [email, setEmail] = useState(customer?.email || '')
   const [birth, setBirth] = useState(customer?.birth || '')
   const [loading, setLoading] = useState(false)
 
@@ -739,7 +779,7 @@ const EditCustomerModal = ({ customer, onSave, onClose }) => {
     e.preventDefault()
     setLoading(true)
     try {
-      await onSave(customer.id, { name, email, birth })
+      await onSave(customer.id, { name, birth })
     } catch (error) {
       // Error handled in parent
     } finally {
@@ -762,16 +802,6 @@ const EditCustomerModal = ({ customer, onSave, onClose }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="input-field"
-              required
-            />
-          </div>
           <div className="mb-6">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Birth Date</label>
             <input
@@ -780,7 +810,21 @@ const EditCustomerModal = ({ customer, onSave, onClose }) => {
               onChange={(e) => setBirth(e.target.value)}
               className="input-field"
               required
+              max={new Date().toISOString().split('T')[0]}
+              style={{
+                colorScheme: 'light'
+              }}
             />
+            <style>{`
+              input[type="date"]::-webkit-calendar-picker-indicator {
+                display: none;
+                -webkit-appearance: none;
+              }
+              input[type="date"]::-moz-calendar-picker-indicator {
+                display: none;
+              }
+            `}</style>
+            <p className="text-xs text-gray-500 mt-1">Click the field and use arrow keys to adjust the date</p>
           </div>
           <div className="flex gap-3">
             <button
@@ -806,5 +850,84 @@ const EditCustomerModal = ({ customer, onSave, onClose }) => {
 
 // Edit Membership Modal Component (reuses existing component)
 import EditMembershipModal from '../components/EditMembershipModal'
+
+// Status Change Modal Component
+const StatusChangeModal = ({ status, onConfirm, onClose }) => {
+  const [reason, setReason] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setLoading(true)
+    try {
+      await onConfirm(reason)
+    } catch (error) {
+      // Error handled in parent
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'active':
+        return 'text-green-600'
+      case 'inactive':
+        return 'text-red-600'
+      case 'banned':
+        return 'text-gray-600'
+      default:
+        return 'text-gray-800'
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">Change User Status</h3>
+        <p className="text-gray-600 mb-6">
+          You are about to change the user status to:{' '}
+          <span className={`font-semibold capitalize ${getStatusColor(status)}`}>{status}</span>
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Reason for Status Change <span className="text-red-500">*</span>
+            </label>
+            <textarea
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              className="input-field"
+              rows="4"
+              placeholder="Please provide a detailed reason for this status change..."
+              required
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              This reason will be logged and visible to the user.
+            </p>
+          </div>
+
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={loading}
+              className="btn-primary flex-1"
+            >
+              {loading ? 'Updating...' : 'Confirm Change'}
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="btn-secondary flex-1"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  )
+}
 
 export default AdminDashboard

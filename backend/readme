@@ -1,27 +1,19 @@
 
-add logic for update membership 
-
-Auth
-add tests for the new auth routes (after learning them more deeply)
+add tests for the  routes (after learning them more deeply)
 i have to put all the refresh tokens in http only later
 
-for pay user only has to click a button
-
-Admin routes 
-
-delete es para borrar usuarios pero solo tendra acceso los employees y los admin
 y ver si  las memberships expiran bien
-
-
-fix frontend 
-hacer que cuando el status sea inactive o banned no se pueda acceder a el
-disable create payment button 
-hacer que el frontend solo aparezca el login panel no el customer 
-asignar un role al employees
 
 edit button on membership para editar todo
 problema en customer edit
-anadir cambiar contrasena
-implementar lo del status al login directamente
-hacer que el mensaje del status salga en el frontend
-ask ia which memberships it uses on the customers dashboard
+arreglar problemas en membership admin 
+
+
+ dates en payment admin 
+
+ terminar gran proyecto manana
+
+
+ Futuro 
+ hacer ruta para editar  el user
+en el inicio que sea con el nombre en vez del email 

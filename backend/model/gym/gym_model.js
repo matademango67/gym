@@ -63,32 +63,17 @@ export class gym_model {
     }
   }
   
-/*static async deleteCustomer(user_id) {
-    const result = await pool.query(
-        `
-        DELETE FROM customers
-        WHERE user_id = $1
-        `,
-        [user_id]
-    );
-    if (result.rowCount === 0) {
-        throw new Error("Customer not found");
-    } else {
-        return { message: "Customer deleted successfully" };
-    }
-}*/
 
  static async UpdateCustomer(user_id, input) {
-    const { name, birth, email } = input;
+    const { name, birth } = input;
     const result = await pool.query(
          `
     UPDATE customers
     SET name = $1,
-        birth = $2,
-        email = $3
-    WHERE user_id = $4
+        birth = $2
+    WHERE user_id = $3
     `,
-    [name, birth, email, user_id]
+    [name, birth, user_id]
     );
    if (result.rowCount === 0) {
     const error = new Error("Customer not found");

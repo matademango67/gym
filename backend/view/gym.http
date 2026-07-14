@@ -20,13 +20,12 @@ Content-Type: application/json
 ### ok
 
 Patch http://localhost:3000/customer
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI1MGJhNDVjLTRhNzEtNGU2ZS1iYjc3LTgyMjQ0YzlmODlmZiIsImVtYWlsIjoiUGFsMDEwMGFhc2FhbmNvc0BnbWFpbC5jb20iLCJyb2xlIjoiY3VzdG9tZXIiLCJpYXQiOjE3ODIyNjY5NjIsImV4cCI6MTc4MjI2Nzg2Mn0.PCwWPnVBz5bcdv1D_S619j0-uSr_F-tlhFva0y6R31I
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiNDBiMzQzLTFjNjMtNGUzYy1iYWViLWUzY2UyMjVkM2MyMSIsImVtYWlsIjoiOTk5OTk5OTlAZ21haWwuY29tIiwicm9sZSI6ImN1c3RvbWVyIiwiaWF0IjoxNzg0MDA5MTgwLCJleHAiOjE3ODQwMTAwODB9.9BxvBR90jFnuQnOn87A4Udd7dBIN9PnT-VL6d3VFSxY
 Content-Type: application/json
 
 {
     "name": "Martineasaal",
-    "birth": "1990-05-15",
-    "email": "marta121@gmail.com"
+    "birth": "1990-05-15"
 }
 ### ok
 ###DELETE  http://localhost:3000/customer

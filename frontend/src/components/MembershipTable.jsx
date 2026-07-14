@@ -112,10 +112,10 @@ const MembershipTable = ({ memberships, loading, onEdit, onPauseActivate, filter
               <td className="px-6 py-4 text-sm">{getStatusBadge(membership.status)}</td>
               <td className="px-6 py-4 text-sm text-gray-800">${membership.cost}</td>
               <td className="px-6 py-4 text-sm text-gray-600">
-                {formatDate(membership.created_at)}
+                {formatDate(membership.start_date)}
               </td>
               <td className="px-6 py-4 text-sm text-gray-600">
-                {formatDate(membership.expire)}
+                {formatDate(membership.end_date)}
               </td>
               <td className="px-6 py-4 text-center">
                 <div className="flex justify-center gap-2">

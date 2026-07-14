@@ -6,6 +6,25 @@ import {token_model} from "../model/token_model.js";
 const saltrounds = Number(process.env.SALT_ROUNDS.trim())
 
 export class auth_controller {
+
+   static async getme(req,res){
+    try {
+        const user_id = req.user.id;
+        const user = await auth_model.getme(user_id);
+        if(!user){
+            return res.status(404).json({ message : 'User not found'})
+        }
+        return res.status(200).json({
+            message: "User retrieved successfully",
+            user: user
+        });
+    } catch (error) {
+        return res.status(500).json({
+            message: "Internal server error"
+        })
+    }
+   }
+   
    static async getUsers (req,res){
         try {
             const users = await auth_model.getUsers();
@@ -159,23 +178,24 @@ export class auth_controller {
   }
 
   static async delete_me(req,res){
-    try{
-      const user_id = req.user.id
-      const user = await auth_model.delete_me(user_id)
-      if(!user){
-        return res.status(404).json({ message : 'User not found'})
-      }
+     try{
+       const user_id = req.user.id
+       const { status_reason } = req.body
+       const user = await auth_model.delete_me(user_id, status_reason)
+       if(!user){
+         return res.status(404).json({ message : 'User not found'})
+       }
 
-       res.clearCookie("refreshToken");
+        res.clearCookie("refreshToken");
 
-        return res.status(200).json({
-            message: "Account deleted successfully"
-        });
+         return res.status(200).json({
+             message: "Account deleted successfully"
+         });
 
-    } catch (error){
-        return res.status(500).json({
-            message: "Internal server error"
-    })
-  }
-}
+     } catch (error){
+         return res.status(500).json({
+             message: "Internal server error"
+     })
+   }
+ }
 }

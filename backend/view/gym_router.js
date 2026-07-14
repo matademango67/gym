@@ -8,5 +8,4 @@ export const gymRouter = Router();
 
 gymRouter.get('/', verifyAccessToken,gym_controller.getCustomers);
 gymRouter.post('/',verifyAccessToken,validateCustomerMiddleware, gym_controller.createCustomer);
-//gymRouter.delete('/',verifyAccessToken, gym_controller.deleteCustomer);
 gymRouter.patch('/',verifyAccessToken, verifyAccess, validateCustomerMiddleware, gym_controller.UpdateCustomer);

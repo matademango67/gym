@@ -8,6 +8,18 @@ import { hashToken , generateRefreshToken} from "../config/refresh_token.js";
 const saltrounds = Number(process.env.SALT_ROUNDS.trim())
 
 export class auth_model {
+
+    static async getme(user_id){
+        try {
+            const result = await pool.query(
+                "SELECT * FROM users WHERE id = $1",
+                [user_id]
+            );
+            return result.rows[0];
+        } catch (error) {
+            throw new Error("Error fetching user: " + error.message);
+        }
+    }
     static async getUsers (){
         try {
         const users = await pool.query("SELECT * FROM users");
@@ -44,6 +56,10 @@ export class auth_model {
      if (!isValid) {
         throw new Error("Invalid password");
      } 
+
+     if (user.status !== 'active') {
+        throw new Error("User is inactive or blocked. Please contact support.");
+    }
        const AccessToken = jwt.sign({
         id: user.id,
         email: user.email,
@@ -53,7 +69,7 @@ export class auth_model {
        const refreshToken = generateRefreshToken();
        await token_model.save_token(user.id, refreshToken);
 
-       return { AccessToken, refreshToken };
+       return { AccessToken, refreshToken , status: user.status};
     }
 
     static async update(email , hashedPassword, new_email, new_password){
@@ -148,13 +164,14 @@ export class auth_model {
             }
      }
 
-     static async delete_me(user_id) {
+      static async delete_me(user_id, status_reason) {
     try {
         const result = await pool.query(
            `UPDATE users
-            SET status = 'inactive'
+            SET status = 'inactive',
+                status_reason = $2
             WHERE id = $1
-             RETURNING *`,[user_id]
+             RETURNING *`,[user_id, status_reason]
             
         );
         return result.rows[0];

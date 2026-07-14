@@ -4,8 +4,8 @@ import { validateUserMiddleware, validateUpdateMiddleware} from "../middleware/a
 import {verifyAccessToken} from "../middleware/accesstoken_validation.js"
 export const authRouter = Router();
 
-authRouter.get('/', auth_controller.getUsers);
-authRouter.post('/register', validateUserMiddleware, auth_controller.registerUser);
+authRouter.get('/', verifyAccessToken , auth_controller.getme);
+authRouter.post('/register', validateUserMiddleware, (req, res) => auth_controller.registerUser(req, res, "customer"));
 authRouter.post('/login',  validateUserMiddleware,  auth_controller.login );
 authRouter.post('/refresh', auth_controller.refreshToken);
 authRouter.patch('/Update', validateUpdateMiddleware ,  auth_controller.update);

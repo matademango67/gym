@@ -2,26 +2,12 @@ import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
-  const { user, logout, deleteAccount } = useAuth()
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
   const handleLogout = async () => {
     await logout()
     navigate('/login')
-  }
-
-  const handleDeactivateAccount = async () => {
-    const confirmed = window.confirm(
-      'Are you sure you want to deactivate your account? After disabling the account, only the staff can activate it.'
-    )
-    
-    if (confirmed) {
-      try {
-        await deleteAccount()
-      } catch (error) {
-        // Error is already handled in AuthContext
-      }
-    }
   }
 
   const isAdminOrEmployee = user?.role === 'admin' || user?.role === 'employee'
@@ -37,27 +23,20 @@ const Navbar = () => {
             <h1 className="text-xl font-bold text-gray-800">Gym Hub</h1>
           </div>
 
-          <div className="flex items-center space-x-6">
-            <div className="hidden sm:block">
-              <p className="text-sm text-gray-600">
-                Welcome, <span className="font-semibold text-gray-800">{user?.email}</span>
-              </p>
+            <div className="flex items-center space-x-6">
+              <div className="hidden sm:block">
+                <p className="text-sm text-gray-600">
+                  Welcome, <span className="font-semibold text-gray-800">{user?.email}</span>
+                </p>
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors duration-200"
+              >
+                Logout
+              </button>
             </div>
-
-            <button
-              onClick={handleDeactivateAccount}
-              className="px-4 py-2 rounded-lg bg-orange-600 text-white font-semibold hover:bg-orange-700 transition-colors duration-200"
-            >
-              Deactivate Account
-            </button>
-
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors duration-200"
-            >
-              Logout
-            </button>
-          </div>
         </div>
       </div>
     </nav>

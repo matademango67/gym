@@ -13,8 +13,11 @@ export const authService = {
   refreshToken: () =>
     api.post('/auth/refresh'),
 
-  deleteMe: () =>
-    api.delete('/auth/me'),
+  deleteMe: (status_reason) =>
+    api.delete('/auth/me', { data: { status_reason } }),
+
+  getMe: () =>
+    api.get('/auth/'),
 }
 
 export const customerService = {
@@ -28,7 +31,7 @@ export const customerService = {
     api.post('/customer', data),
 
   update: (id, data) =>
-    api.patch(`/customer/${id}`, data),
+    api.patch('/customer', data),
 
   delete: (id) =>
     api.delete('/customer', { data: { id } }),
@@ -88,7 +91,14 @@ export const adminService = {
 
   // Memberships - Admin view (all memberships)
   getAllMemberships: () =>
-    api.get('/membership'),
+    api.get('/admin/memberships'),
+
+  // Membership management - Admin
+  changeMembershipStatus: (membershipId) =>
+    api.patch('/admin/updatemembership/status', { membership_id: membershipId }),
+
+  changeMembershipType: (membershipId) =>
+    api.patch('/admin/updatemembership/type', { membership_id: membershipId }),
 
   // Payments - Admin view (all payments)
   getAllPayments: () =>
