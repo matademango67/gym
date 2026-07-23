@@ -37,7 +37,7 @@ export class gym_model {
     return result.rows.length ? result.rows : null;
 }
 
-  static async createCustomer(input, user_id) {
+  static async createCustomer(user_id , input) {
     try {
       const { name, birth } = input;
       const id = user_id;

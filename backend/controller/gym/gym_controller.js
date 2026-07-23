@@ -38,7 +38,7 @@ export class gym_controller {
         const input = req.body
         try {
             const newCustomer = await gym_model.createCustomer(user_id,input);
-            res.status(201).json(newCustomer);
+            return res.status(201).json(newCustomer);
         } catch (error) {
           return  res.status(500).json({ error: error.message });
         }

@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 const customers = z.object({
-    id: z.string().uuid().optional(),
     name: z.string().min(1, "Name is required").max(30, "Name must be less than 100 characters"),
     birth: z.string().refine(
         (date) => !isNaN(Date.parse(date)),
