@@ -6,7 +6,7 @@ describe("GET / - getCustomers", () => {
   let req, res;
 
   beforeEach(() => {
-    req = {};
+    req = {user : { id:  "cb40b343-1c63-4e3c-baeb-e3ce225d3c21"}};
     res = {
       json: jest.fn().mockReturnThis(),
       status: jest.fn().mockReturnThis(),
@@ -26,6 +26,19 @@ describe("GET / - getCustomers", () => {
     expect(spy).toHaveBeenCalled();
     expect(res.json).toHaveBeenCalledWith(mockCustomers);
     
+    spy.mockRestore();
+  });
+
+  test("should return the current customer when successful", async () => {
+    const mockCustomer = [
+      { id: 1, name: "John", birth: "1990-01-01", email: "john@email.com"}
+    ];
+    const spy = jest.spyOn(gymModelModule.gym_model, 'getCustomers').mockResolvedValue(mockCustomer);
+
+    await gym_controller.getCustomers(req, res);
+
+    expect(spy).toHaveBeenCalled();
+    expect(res.json).toHaveBeenCalledWith(mockCustomer);
     spy.mockRestore();
   });
 

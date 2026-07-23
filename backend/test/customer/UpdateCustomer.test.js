@@ -7,14 +7,11 @@ describe("PATCH /:id", () => {
 
   beforeEach(() => {
     req = {
-      params: {
-        id: 1,
-      },
+      user: { id:  "cb40b343-1c63-4e3c-baeb-e3ce225d3c21" },
 
       body: {
         name: "John Updated",
-        birth: "1990-01-01",
-        email: "johnupdated@email.com",
+        birth: "1990-01-01"
       },
     };
 
@@ -32,9 +29,8 @@ describe("PATCH /:id", () => {
     await gym_controller.UpdateCustomer(req, res);
 
     expect(spy).toHaveBeenCalledWith(
-      1,
+      "cb40b343-1c63-4e3c-baeb-e3ce225d3c21",
       {"birth": "1990-01-01", 
-       "email": "johnupdated@email.com",
        "name": "John Updated"
       }
     );
@@ -48,6 +44,7 @@ describe("PATCH /:id", () => {
 
   test("should return 404 when customer is not found", async () => {
     const error = new Error("Customer not found");
+    error.statusCode = 404;
 
     const spy = jest
       .spyOn(gymModelModule.gym_model, "UpdateCustomer")

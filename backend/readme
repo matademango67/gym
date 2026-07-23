@@ -1,15 +1,8 @@
-
 add tests for the  routes (after learning them more deeply)
 i have to put all the refresh tokens in http only later
 
 y ver si  las memberships expiran bien
 
-edit button on membership para editar todo
-problema en customer edit
-arreglar problemas en membership admin 
-
-
- dates en payment admin 
 
  terminar gran proyecto manana
 
@@ -17,3 +10,6 @@ arreglar problemas en membership admin
  Futuro 
  hacer ruta para editar  el user
 en el inicio que sea con el nombre en vez del email 
+
+
+me faltan dos errores en status membership 400 y 500 

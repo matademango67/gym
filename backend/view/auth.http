@@ -16,8 +16,8 @@ POST http://localhost:3000/auth/login
 Content-Type: application/json
 
 {
-     "email": "Pas10asa@gmail.com",
-    "password": "2200000"
+     "email": "admina100@gmail.com",
+    "password": "admina100@gmail.com"
 }
 ### this is the update user route
 PATCH http://localhost:3000/auth/Update

@@ -37,16 +37,16 @@ export class gym_controller {
         const user_id = req.user.id
         const input = req.body
         try {
-            const newCustomer = await gym_model.createCustomer(input,user_id);
+            const newCustomer = await gym_model.createCustomer(user_id,input);
             res.status(201).json(newCustomer);
         } catch (error) {
           return  res.status(500).json({ error: error.message });
         }
 } 
-
     static async UpdateCustomer (req,res){
         const user_id = req.user.id
         const input = req.body;
+
         try {
             await gym_model.UpdateCustomer(user_id,input);
             res.json({ message: "Customer updated successfully" });

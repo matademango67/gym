@@ -7,7 +7,7 @@ describe("GET /:customer_id - SearchCustomer", () => {
 
   beforeEach(() => {
     req = {
-      params: { customer_id: "ba5e434e-0ed6-45dd-ac92-3dfb39234e43" },
+      user: { id: "26457d53-d34c-4750-bd30-102299204078" },
     };
     res = {
       json: jest.fn().mockReturnThis(),
@@ -30,7 +30,7 @@ describe("GET /:customer_id - SearchCustomer", () => {
 
     await gym_membership.search_memberships(req, res);
 
-    expect(spy).toHaveBeenCalledWith("ba5e434e-0ed6-45dd-ac92-3dfb39234e43");
+    expect(spy).toHaveBeenCalledWith("26457d53-d34c-4750-bd30-102299204078");
     expect(res.json).toHaveBeenCalledWith(mockCustomer);
     
     spy.mockRestore();

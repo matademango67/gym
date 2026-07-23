@@ -44,7 +44,7 @@ export class paymentsModel{
         );
 
         if (!membershipResult.rows.length) {
-            throw new Error('Membership not found');
+            throw new Error("Membership not found");
         }
 
         const { id, type } = membershipResult.rows[0];

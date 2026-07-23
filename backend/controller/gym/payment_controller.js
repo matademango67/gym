@@ -31,6 +31,9 @@ import { paymentsModel } from "../../model/gym/payment_model.js"
         const newpayment = await paymentsModel.create_payment(user_id)
         return res.status(201).json(newpayment);
     } catch (error) {
+        if(error.message === "Membership not found"){
+            return res.status(404).json({error: error.message})
+        }
          return res.status(500).json({
         error: error.message
     });

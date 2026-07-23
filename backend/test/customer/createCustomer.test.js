@@ -7,11 +7,11 @@ describe("POST /", () => {
 
   beforeEach(() => {
     req = {
+      user : { id:  "cb40b343-1c63-4e3c-baeb-e3ce225d3c21"},
       body: {
         name: "John",
-        birth: "1990-01-01",
-        email: "john@email.com",
-      },
+        birth: "1990-01-01"
+      }
     };
 
     res = {
@@ -24,8 +24,7 @@ describe("POST /", () => {
     const mockCustomer = {
       id: 1,
       name: "John",
-      birth: "1990-01-01",
-      email: "john@email.com",
+      birth: "1990-01-01"
     };
 
     const spy = jest
@@ -34,15 +33,16 @@ describe("POST /", () => {
 
     await gym_controller.createCustomer(req, res);
 
-    expect(spy).toHaveBeenCalledWith( {
+    expect(spy).toHaveBeenCalledWith( 
+      req.user.id,
+      {
       birth: "1990-01-01",
-      email: "john@email.com",
       name: "John" }
     );
 
     expect(res.status).toHaveBeenCalledWith(201);
 
-    expect(res.json).toHaveBeenCalledWith(mockCustomer);
+    expect(res.json).toHaveBeenCalledWith( mockCustomer);
 
     spy.mockRestore();
   });

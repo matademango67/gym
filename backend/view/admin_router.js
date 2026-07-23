@@ -10,7 +10,7 @@ import {verifyAccessToken} from "../middleware/accesstoken_validation.js"
 export const AdminRouter = Router();
 
 AdminRouter.get('/',verifyAccessToken, verifyEmployee, auth_controller.getUsers);
-AdminRouter.get('/customers',verifyAccessToken, verifyEmployee, gym_controller.getAllCustomers);
+AdminRouter.get('/customers',verifyAccessToken, verifyEmployee, gym_controller.getAllCustomers); 
 AdminRouter.get('/findcustomer/:search',verifyAccessToken,verifyEmployee, gym_controller.SearchCustomer);
 AdminRouter.get('/memberships',verifyAccessToken, verifyEmployee, gym_membership.get_memberships);
 AdminRouter.patch('/memberships/type',verifyAccessToken , verifyEmployee, gym_membership.changeType_membership)

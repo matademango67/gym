@@ -1,7 +1,7 @@
  import {pool} from "../../db/gym.js";
 
 export class Membership_model {
-    static async get_memberships(){
+    static async get_memberships(){ 
         const result = await pool.query(`
             SELECT 
                 m.id,
