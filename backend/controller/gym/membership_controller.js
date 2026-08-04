@@ -22,7 +22,6 @@ export class gym_membership {
         } catch (error){
             return res.status(500).json({error: error.message})
         } 
-
     }
     static async create_membership (req,res){
         const user_id = req.user.id;

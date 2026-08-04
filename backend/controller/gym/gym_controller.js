@@ -1,11 +1,11 @@
 import { gym_model } from "../../model/gym/gym_model.js";
 
 export class gym_controller {
-    static async getCustomers (req,res){
+    static async getCustomer (req,res){
         const user_id = req.user.id
         try {
-            const customers = await gym_model.getCustomers(user_id);
-            res.json(customers);
+            const customers = await gym_model.getCustomer(user_id);
+           return  res.status(200).json(customers);
         } catch (error) {
            return res.status(500).json({ error: error.message });
         }
@@ -14,7 +14,7 @@ export class gym_controller {
     static async getAllCustomers (req,res){
         try {
             const customers = await gym_model.getAllCustomers();
-            res.json(customers);
+           return  res.status(200).json(customers);
         } catch (error) {
            return res.status(500).json({ error: error.message });
         }
@@ -25,9 +25,9 @@ export class gym_controller {
         try {
             const customer = await gym_model.SearchCustomer(search);
             if (customer) {
-                res.json(customer);
+              return res.status(200).json(customer);
             } else {
-                res.status(404).json({ error: "Customer not found" });
+               return res.status(404).json({ error: "Customer not found" });
             }
         } catch (error) {
             return res.status(500).json({ error: error.message });
@@ -49,7 +49,7 @@ export class gym_controller {
 
         try {
             await gym_model.UpdateCustomer(user_id,input);
-            res.json({ message: "Customer updated successfully" });
+             return  res.status(200).json({ message: "Customer updated successfully" });
         } catch (error) {
     if (error.statusCode) {
         return res.status(error.statusCode).json({

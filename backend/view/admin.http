@@ -5,11 +5,11 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjZiOTYwL
 
 GET http://localhost:3000/admin/customers
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjZiOTYwLTg1YjctNDZjNC05NmM0LTdlOWY1ZmM3ZjM4MiIsImVtYWlsIjoiYWRtaW5hMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NDA2MDg5NywiZXhwIjoxNzg0MDYxNzk3fQ.OV1nT8W2iZl7nZ8OuEEMBYiaf2fU3BnRLgguevtJIIA
-### this is the admin register route
+### this is the admin route to search a customer by name or email
 
-GET http://localhost:3000/admin/findcustomer/as
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjI1MTQyLCJleHAiOjE3ODM2MjYwNDJ9.jjrfTNXhB_ncCx3PKXszkAqgwmIrsf6V8nWax2OBwoI
-### this is the admin register route
+GET http://localhost:3000/admin/findcustomer/assadsdf2223323
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjZiOTYwLTg1YjctNDZjNC05NmM0LTdlOWY1ZmM3ZjM4MiIsImVtYWlsIjoiYWRtaW5hMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NTgwMTcwMywiZXhwIjoxNzg1ODAyNjAzfQ.fFomqhdlmLoLEozhg9HO7QahT4px-eyR_nbYxA9sfCg
+### this is the admin register route for a new admin
 
 POST http://localhost:3000/admin/register
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjIzMjY2LCJleHAiOjE3ODM2MjQxNjZ9.bD3oVbcwaAhtMQ1bu60aP6nTchwsgStmTRrqaTZumJM
@@ -20,7 +20,7 @@ Content-Type: application/json
     "password": "3333333333"
 }
 
-### this is the admin register route
+### this is the admin register route a new employee
 POST http://localhost:3000/admin/register/employee
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
 Content-Type: application/json
@@ -40,24 +40,15 @@ Content-Type: application/json
     "status_reason": "User requested account deletion"
 }
 
-### this is the admin register route
+### this is the admin route to get all the payments
 GET http://localhost:3000/admin/payments
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNjI1MTQyLCJleHAiOjE3ODM2MjYwNDJ9.jjrfTNXhB_ncCx3PKXszkAqgwmIrsf6V8nWax2OBwoI
 
-### this is the admin register route
+### this is the admin route to get all the memberships
 GET http://localhost:3000/admin/memberships
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjZiOTYwLTg1YjctNDZjNC05NmM0LTdlOWY1ZmM3ZjM4MiIsImVtYWlsIjoiYWRtaW5hMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NDAwNzU3OSwiZXhwIjoxNzg0MDA4NDc5fQ.poKota98y5qLt0AfEF8uMDOVYKMx_0VHb7Nrmtevcn4
 
-### this is for the admins to change the state to inactive for the users
-PATCH http://localhost:3000/admin/updatecustomer
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijk1ZGNhMjE0LWE3ZGYtNDQ2NS1iY2ZmLTBhYWQyYjNlNGVjOSIsImVtYWlsIjoiYWRtaW4xMjFAZ21haWwuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNzgzNTY1OTg4LCJleHAiOjE3ODM1NjY4ODh9.LkCvsZ-Z4NRbeskf5heyeCBij0w8TT8A-9oVFX_Y5KU
-Content-Type: application/json
 
-{
-    "user_id": "8be0e5de-d586-4640-ae8c-991852ccd969",
-    "status": "inactive",
-    "status_reason": "User requested account deletion"
-}
 ### this is for the admins to change the type of membership for the users
 PATCH http://localhost:3000/admin/memberships/type
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVmZjZiOTYwLTg1YjctNDZjNC05NmM0LTdlOWY1ZmM3ZjM4MiIsImVtYWlsIjoiYWRtaW5hMTAwQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc4NDA2MDg5NywiZXhwIjoxNzg0MDYxNzk3fQ.OV1nT8W2iZl7nZ8OuEEMBYiaf2fU3BnRLgguevtJIIA

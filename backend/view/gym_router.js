@@ -6,6 +6,6 @@ import {verifyAccess} from "../middleware/verifyAccess.js";
 
 export const gymRouter = Router();
 
-gymRouter.get('/', verifyAccessToken,gym_controller.getCustomers);
+gymRouter.get('/', verifyAccessToken,gym_controller.getCustomer);
 gymRouter.post('/',verifyAccessToken,validateCustomerMiddleware, gym_controller.createCustomer);
 gymRouter.patch('/',verifyAccessToken, verifyAccess, validateCustomerMiddleware, gym_controller.UpdateCustomer);

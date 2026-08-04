@@ -4,7 +4,6 @@ i have to put all the refresh tokens in http only later
 y ver si  las memberships expiran bien
 
 
- terminar gran proyecto manana
 
 
  Futuro 
@@ -12,4 +11,4 @@ y ver si  las memberships expiran bien
 en el inicio que sea con el nombre en vez del email 
 
 
-me faltan dos errores en status membership 400 y 500 
+cambie la database para hacer el integration tests

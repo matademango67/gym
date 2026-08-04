@@ -1,7 +1,7 @@
 import {pool} from "../../db/gym.js";
 
 export class gym_model {
-    static async getCustomers (user_id){
+    static async getCustomer (user_id){
         const result = await pool.query(`SELECT * 
                                        FROM customers c
                                        WHERE c.user_id = $1`,[user_id]);
