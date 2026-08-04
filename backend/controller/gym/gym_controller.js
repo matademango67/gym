@@ -20,7 +20,7 @@ export class gym_controller {
         }
     }
 
-    static async SearchCustomer (req,res){
+    static async SearchCustome (req,res){
         const { search } = req.params;
         try {
             const customer = await gym_model.SearchCustomer(search);
