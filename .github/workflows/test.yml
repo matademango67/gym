@@ -1,4 +1,4 @@
-name: Run Tests
+name: Backend Tests
 
 on:
   push:
@@ -9,6 +9,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +25,12 @@ jobs:
         with:
           node-version: 24
           cache: pnpm
+          cache-dependency-path: backend/pnpm-lock.yaml
 
-      - run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      - run: pnpm test
+      - name: Run tests
+        run: pnpm test
+      
+ 
