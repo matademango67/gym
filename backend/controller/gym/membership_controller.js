@@ -13,12 +13,11 @@ export class gym_membership {
         const user_id = req.user.id;
         try{
             const membership = await Membership_model.search_membership(user_id)
-            if(membership){
+            if(membership.length > 0){
                res.status(200).json(membership)
             } else {
                 return res.status(404).json({error: "membership not found"})
-            }
-            
+            }   
         } catch (error){
             return res.status(500).json({error: error.message})
         } 
@@ -31,17 +30,18 @@ export class gym_membership {
             res.status(201).json(newMembership);
         } catch (error) {
 
-    if (error.statusCode === 409) {
-        return res.status(409).json({
-            error: error.message
-        });
+    if (error.statusCode === 404 || error.statusCode === 409) {
+    return res.status(error.statusCode).json({
+        error: error.message
+    });
+}
     }
 
     return res.status(500).json({
         error: error.message
     });
 }
-}
+
 
  static async changeStatus_membership (req,res){
    const user_id = req.params.id || req.body.user_id;

@@ -57,9 +57,11 @@ return result.rows;
  `SELECT id  from customers where user_id = $1` ,
   [user_id]); 
                                
-  if (customerResult.rowCount === 0) {
-    throw new Error("Customer not found");
-  }
+ if (customerResult.rowCount === 0) {
+    const error = new Error("Customer not found");
+    error.statusCode = 404;
+    throw error;
+}
 
   const customer_id = customerResult.rows[0].id;
 

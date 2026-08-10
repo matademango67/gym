@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const customers = z.object({
-    name: z.string().min(1, "Name is required").max(30, "Name must be less than 100 characters"),
+    name: z.string("name is required").min(1, "Name is required").max(30, "Name must be less than 100 characters"),
     birth: z.string().refine(
         (date) => !isNaN(Date.parse(date)),
         "Birth date must be a valid date (YYYY-MM-DD)"
@@ -28,7 +28,7 @@ const membership = z.object({
     const result = Validar_customer(req.body);
     if(!result.success){
         //flatten es para que el mensaje de error se vea mejor(basicamente)
-        return res.status(400).json({ error: result.error.flatten()})
+         return res.status(400).json({ error: result.error.issues[0].message})
     }
     next()
  }
@@ -37,7 +37,10 @@ const membership = z.object({
     const result = Validar_membership(req.body);
     if(!result.success){
         //flatten es para que el mensaje de error se vea mejor(basicamente)
-        return res.status(400).json({ error: result.error.flatten()})
+        
+        return res.status(400).json({ error: result.error.issues[0].message})
     }
     next()
  }
+
+  

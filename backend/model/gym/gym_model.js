@@ -7,7 +7,7 @@ export class gym_model {
                                        WHERE c.user_id = $1`,[user_id]);
         const rows = result.rows;
         if(rows.length === 0){
-            throw new Error("error")
+            throw new Error("customer not found")
         } else{
              return rows;
         }

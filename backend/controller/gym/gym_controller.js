@@ -7,7 +7,12 @@ export class gym_controller {
             const customers = await gym_model.getCustomer(user_id);
            return  res.status(200).json(customers);
         } catch (error) {
-           return res.status(500).json({ error: error.message });
+            if(error.message === "customer not found"){
+                return res.status(404).json({ error : error.message})
+            } else {
+                 return res.status(500).json({ error: error.message });
+            }
+           
         }
     }
 
@@ -20,7 +25,7 @@ export class gym_controller {
         }
     }
 
-    static async SearchCustome (req,res){
+    static async SearchCustomer (req,res){
         const { search } = req.params;
         try {
             const customer = await gym_model.SearchCustomer(search);
