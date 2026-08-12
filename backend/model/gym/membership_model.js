@@ -47,6 +47,12 @@ export class Membership_model {
     [user_id]
 );
 
+if(result.rowCount === 0){
+   const error = new Error("Membership not found");
+    error.statusCode = 404;
+    throw error;
+}
+
 return result.rows;
 
     }
@@ -82,21 +88,21 @@ try {
   
     const result = await pool.query(query, [type, customer_id]);
 
-    return result.rows[0];
+    return result.rows[0]|| null;
 
-} catch (error) {
+}catch (error) {
 
-    if (error.code === '23505') {
-        const customError = new Error(
+   if (error.code === "23505") {
+        const newError = new Error(
             "Account already has a membership"
         );
 
-        customError.statusCode = 409;
+        newError.statusCode = 409;
 
-        throw customError;
+        throw newError;
     }
 
-   throw new Error
+    throw error;
 } }
 
   static async changeStatus_membership(user_id){

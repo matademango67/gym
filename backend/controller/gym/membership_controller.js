@@ -15,10 +15,11 @@ export class gym_membership {
             const membership = await Membership_model.search_membership(user_id)
             if(membership.length > 0){
                res.status(200).json(membership)
-            } else {
-                return res.status(404).json({error: "membership not found"})
-            }   
+            }     
         } catch (error){
+            if(error.statusCode === 404){
+                return res.status(404).json({ error : error.message})
+            }
             return res.status(500).json({error: error.message})
         } 
     }
@@ -35,11 +36,10 @@ export class gym_membership {
         error: error.message
     });
 }
-    }
-
     return res.status(500).json({
         error: error.message
     });
+    }
 }
 
 
@@ -50,7 +50,6 @@ try {
   const result = await Membership_model.changeStatus_membership(user_id);
   res.status(200).json(result);
 } catch (error) {
-  console.error(error);
 
   if (error.message === "Customer not found" || error.message === "Membership not found") {
     return res.status(404).json({ message: error.message });
@@ -66,7 +65,6 @@ try {
 
  static async changeType_membership(req,res){
    const user_id = req.body.user_id
-   console.log("user_id:", user_id); // Log the user_id to check its value
 
    try {
     const result = await Membership_model.changeType_membership(user_id)
