@@ -1,6 +1,7 @@
 import { jest, describe, test, expect, beforeEach, beforeAll } from '@jest/globals';
 import { gym_membership } from '../../../controller/gym/membership_controller.js';
 import * as gymModelModule from '../../../model/gym/membership_model.js'
+import { afterEach } from '@jest/globals';
 
 describe("POST / - create_membership", () => {
   let req, res;
@@ -18,6 +19,10 @@ describe("POST / - create_membership", () => {
       status: jest.fn().mockReturnThis(),
     };
   });
+
+ afterEach(() => {
+    jest.restoreAllMocks();
+});
 
   test("should create a membership successfully", async () => {
     const mockCustomer = {
@@ -40,7 +45,6 @@ describe("POST / - create_membership", () => {
 
     expect(res.json).toHaveBeenCalledWith(mockCustomer);
 
-    spy.mockRestore();
   });
 
    test("should return 409 when customer already has an account", async () => {
@@ -61,10 +65,9 @@ describe("POST / - create_membership", () => {
       error: "Account already has a membership",
     });
 
-    spy.mockRestore();
   });
 
-  test("should return 500 when customer creation fails", async () => {
+  test("should return 500 when membership creation fails", async () => {
     const error = new Error("Failed to create a membership");
 
     const spy = jest
@@ -79,7 +82,6 @@ describe("POST / - create_membership", () => {
       error: "Failed to create a membership",
     });
 
-    spy.mockRestore();
   });
 });
 
@@ -95,6 +97,9 @@ describe("GET / - get_memberships" , () => {
       status: jest.fn().mockReturnThis(),
     };
   });
+  afterEach(() => {
+    jest.restoreAllMocks();
+});
 
   test("it should get all the membership and return 200" , async () => {
     const mockmembership = [
@@ -127,7 +132,7 @@ describe("GET / - get_memberships" , () => {
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: "Database error" });
     
-    spy.mockRestore();
+    
   });
   
 })
@@ -144,6 +149,10 @@ describe("GET /:customer_id - search_memberships", () => {
       status: jest.fn().mockReturnThis(),
     };
   });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+});
 
   test("should return matching Membership when found", async () => {
     const mockmembership = [
@@ -163,18 +172,20 @@ describe("GET /:customer_id - search_memberships", () => {
     expect(spy).toHaveBeenCalledWith("26457d53-d34c-4750-bd30-102299204078");
     expect(res.json).toHaveBeenCalledWith(mockmembership);
     
-    spy.mockRestore();
   });
 
   test("should return 404 when Membership not found", async () => {
-    const spy = jest.spyOn(gymModelModule.Membership_model, 'search_membership').mockResolvedValue(null);
+    const error = new Error("Membership not found");
+    error.statusCode = 404;
+
+     const spy = jest.spyOn(gymModelModule.Membership_model, 'search_membership').mockRejectedValue(error);
 
     await gym_membership.search_memberships(req, res);
 
     expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.json).toHaveBeenCalledWith({ error: "membership not found" });
+    expect(res.json).toHaveBeenCalledWith({ error: "Membership not found" });
     
-    spy.mockRestore();
+
   });
 
   test("should return 500 error when database query fails", async () => {
@@ -186,7 +197,6 @@ describe("GET /:customer_id - search_memberships", () => {
     expect(res.status).toHaveBeenCalledWith(500);
     expect(res.json).toHaveBeenCalledWith({ error: "Database error" });
     
-    spy.mockRestore();
   });
 });
 

@@ -194,7 +194,7 @@ afterEach(async () => {
             expect(response.statusCode).toBe(404);
 
             expect(response.body).toEqual({
-                error: "membership not found"
+                error: "Membership not found"
             });
 
         })
@@ -430,7 +430,9 @@ describe('POST /membership/' , () => {
 })
 })
 
-describe('')
+describe('PACTH /membership/' , () => {
+    
+})
 
 
 //pnpm test /membership.test.js
