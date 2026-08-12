@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const pool = new Pool({
-  connectionString: process.env.DB_CONNECTIONSTRING,
+  connectionString: process.env.DB_CONNECTIONSTRING
 });
 
 export async function connectDB() {
