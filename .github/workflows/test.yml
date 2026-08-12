@@ -30,21 +30,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check database configuration
+        env:
+          DB_CONNECTIONSTRING: ${{ secrets.DB_CONNECTIONSTRING }}
+        run: |
+          if [ -z "$DB_CONNECTIONSTRING" ]; then
+            echo "DB_CONNECTIONSTRING is missing"
+            exit 1
+          else
+            echo "DB_CONNECTIONSTRING is configured"
+          fi
+
       - name: Run tests
         env:
           SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
           DB_CONNECTIONSTRING: ${{ secrets.DB_CONNECTIONSTRING }}
-
-      - name: Check database configuration
-  env:
-    DB_CONNECTIONSTRING: ${{ secrets.DB_CONNECTIONSTRING }}
-  run: |
-    if [ -z "$DB_CONNECTIONSTRING" ]; then
-      echo "DB_CONNECTIONSTRING is missing"
-      exit 1
-    else
-      echo "DB_CONNECTIONSTRING is configured"
-    fi
-
         run: pnpm test
