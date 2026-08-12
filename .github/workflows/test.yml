@@ -31,9 +31,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
-      - env:
-          SALT_ROUNDS: ${{ secrets.SALT_ROUNDS}}
+        env:
+          SALT_ROUNDS: ${{ secrets.SALT_ROUNDS }}
           ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
-          DB_CONNECTIONSTRIN: ${{  secrets.DB_CONNECTIONSTRING }}
+          DB_CONNECTIONSTRING: ${{ secrets.DB_CONNECTIONSTRING }}
         run: pnpm test
-      
